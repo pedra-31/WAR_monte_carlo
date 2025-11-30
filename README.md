@@ -2,6 +2,11 @@
 Projeto que visa fazer uma maquina para jogar WAR 
 
 # Diretórios:
-    -src: arquivos source hpp/cpp
-    -bin: arquivos tipo .o
-    -build: arquivo executável.
+WAR_monte_carlo
+├── 📁 bin
+├── 📁 build
+├── 📜 README.md
+├── 📁 src
+│ ├── 📄 main.cpp
+│ ├── 📄 War.hpp
+│ ├── 📄 World_map.hpp
