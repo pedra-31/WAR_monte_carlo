@@ -1,2 +1,3 @@
-Alasca
-Mackenzie
+A 1 a
+B 2 a
+C 3 b

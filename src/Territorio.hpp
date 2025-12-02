@@ -1,18 +1,18 @@
-#ifndef VERTICE_HPP
-#define VERTICE_HPP
+#ifndef TERRITORIO_HPP
+#define TERRITORIO_HPP
 
 #include <string>
 #include <iostream>
 #include <cstdint>
 
 /**
- * @class Vertice
+ * @class Territorio
  * @brief Classe auxiliar, desenhada para representar os vértices do mapa 
  */
-class Vertice {
+class Territorio {
     private:
 
-        uint16_t _id_vertice;
+        uint16_t _id_Territorio;
         std::string _nome;
         char _player;
         unsigned int _num_tropas;
@@ -20,16 +20,16 @@ class Vertice {
     public:
 
         /**
-         * @brief Construtor de Vertice
+         * @brief Construtor de Territorio
          */
-        Vertice(uint16_t id_vertice, std::string nome, char player, unsigned int tropas);
+        Territorio(uint16_t id_Territorio, std::string nome, char player, unsigned int tropas);
 
 
         //getters:
-        uint16_t get_id();
-        std::string get_nome();
-        char get_player();
-        unsigned int get_num_tropas();
+        uint16_t get_id() const;
+        std::string get_nome() const;
+        char get_player() const;
+        unsigned int get_num_tropas() const;
 
         //setters
         void set_player(char novo_player);
@@ -38,23 +38,23 @@ class Vertice {
         /**
          * @brief Mostra no cout a situação do vértice
          */
-        void info();
+        void info() const;
 
         /**
          * @brief += Sobrecarregado. Soma ao num de tropas que está posicionada no vértice
          */
-        Vertice& operator+=(unsigned int x);
+        Territorio& operator+=(unsigned int x);
 
         /**
          * @brief -= Sobrecarregado. Subtrai ao num de tropas que está posicionada no vértice
          * Joga uma exceção
          */
-        Vertice& operator-=(unsigned int x);
+        Territorio& operator-=(unsigned int x);
 
         /**
-         * @brief Destrutor de Vertice
+         * @brief Destrutor de Territorio
          */
-        ~Vertice();
+        ~Territorio();
 };
 
 
