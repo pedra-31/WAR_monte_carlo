@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <cstdint>
 
 /**
  * @class Vertice
@@ -11,7 +12,7 @@
 class Vertice {
     private:
 
-        unsigned int _id_vertice;
+        uint16_t _id_vertice;
         std::string _nome;
         char _player;
         unsigned int _num_tropas;
@@ -21,11 +22,11 @@ class Vertice {
         /**
          * @brief Construtor de Vertice
          */
-        Vertice(unsigned int id_vertice, std::string nome, char player, unsigned int tropas);
+        Vertice(uint16_t id_vertice, std::string nome, char player, unsigned int tropas);
 
 
         //getters:
-        unsigned int get_id();
+        uint16_t get_id();
         std::string get_nome();
         char get_player();
         unsigned int get_num_tropas();

@@ -1,5 +1,6 @@
 #ifndef EGDE_HPP
 #define EGDE_HPP
+#include <cstdint>
 
 
 /**
@@ -9,8 +10,8 @@
 class Edge {
     private:
 
-    unsigned int _v1;
-    unsigned int _v2;
+    uint16_t _v1;
+    uint16_t _v2;
 
     public:
         /**
@@ -18,13 +19,12 @@ class Edge {
          * @param id_v1 id do vértice 1
          * @param id_v2 id do vértice 2
          */
-        Edge(unsigned int id_v1, unsigned int id_v2);
+        Edge(uint16_t id_v1, uint16_t id_v2);
 
+        uint16_t get_v1();
+        uint16_t get_v2();
 
-
-
-
-
+        bool has_vertice(uint16_t id);
 
         /**
          * @brief Destrutor de Edge

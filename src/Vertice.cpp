@@ -2,14 +2,14 @@
 
 
 
-        Vertice::Vertice(unsigned int id_vertice, std::string nome, char player, unsigned int num_tropas) 
+        Vertice::Vertice(uint16_t id_vertice, std::string nome, char player, unsigned int num_tropas) 
             : _id_vertice(id_vertice),
             _nome(nome),
             _player(player),
             _num_tropas(num_tropas){
         }
 
-        unsigned int Vertice::get_id(){
+        uint16_t Vertice::get_id(){
             return _id_vertice;
         }
         std::string Vertice::get_nome(){
@@ -27,7 +27,7 @@
         }
         void Vertice::set_tropas(unsigned int numero){
             if(numero < 1){
-                throw std::runtime_error("Vertice error: numero (parametro) deve ser MAIOR que 1");
+                throw std::runtime_error("Vertice error: Em set_tropas(unsigned int numero), numero (parametro) deve ser MAIOR que 1");
             }
             _num_tropas = numero;
         }
@@ -47,7 +47,7 @@
 
         Vertice& Vertice::operator-=(unsigned int x) {
             if (_num_tropas - x < 1){
-                throw std::runtime_error("Vertice error: DEVE conter pelo menor 1 tropa posicionada em cada vértice");
+                throw std::runtime_error("Vertice error: Em operator-=(unsigned int x), ao final da operação DEVE conter pelo menor 1 tropa posicionada em cada vértice");
             }
             
             _num_tropas -= x;
