@@ -20,14 +20,14 @@ class War {
     private:
         
         /**
-         * @brief quantidade de jogadores jogando o jogo
+         * @brief quantidade de jogadores ativos
          */
         unsigned int _players;
 
         /**
          * @brief um mapa que contém os continentes e dentro de cada continente, seus id_territórios
          */
-        std::map<Continente> _continentes;
+        std::vector<Continente> _continentes;
 
         /**
          * @brief vector que contém todos os territorios (vértices)
@@ -50,7 +50,7 @@ class War {
         void ler_divisas(const std::string& caminho);
         void ler_continentes(const std::string& caminho);
 
-
+        void info();
 
 
 

@@ -1,7 +1,10 @@
 #include "Continente.hpp"
 
 
-        Continente::Continente(unsigned int pontos_conquista, std::vector<uint16_t> vertices){
+        Continente::Continente(std::string nome, unsigned int pontos_conquista, std::vector<uint16_t> vertices):
+        _nome(nome),
+        _pontos_conquista(pontos_conquista),
+        _vertices(vertices){
 
         }
 
@@ -12,6 +15,9 @@
             return _vertices;
         }
 
+        const std::string& Continente::get_nome() const{
+            return _nome;
+        }
 
         bool Continente::possui_territorios(const std::vector<uint16_t>& v) const{
             // Conta quantos vértices do continente aparecem no vetor v

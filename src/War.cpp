@@ -1,10 +1,13 @@
 #include "War.hpp"
 #include "Territorio.hpp"
 #include "Divisa.hpp"
+#include "Continente.hpp"
 
         War::War(int players) :
         _players(players){
-            
+            ler_territorios("../data/territorios.txt");
+            ler_divisas("../data/divisas.txt");
+            ler_continentes("../data/continentes.txt");   
         }
 
 
@@ -17,8 +20,7 @@
             char player;
 
             while (arq >> nome >> id >> player) {
-                Territorio t(id, nome, player, 1); 
-                territorios.push_back(t);
+                territorios.push_back(Territorio(id, nome, player, 1));
             }
 
             territorios = _territorios;
@@ -33,8 +35,7 @@
             uint16_t id_2;
 
             while (arq >> id_1 >> id_2) {
-                Divisa a(id_1, id_2); 
-                divisas.push_back(a);
+                divisas.push_back(Divisa(id_1, id_2));
             }
 
             _divisas = divisas;
@@ -42,16 +43,21 @@
 
         void War::ler_continentes(const std::string& caminho){
             std::ifstream arq(caminho);
-            std::map<std::string, std::vector<uint16_t>> continentes;
+            std::vector<Continente> continentes;
 
+            unsigned int valor;
             std::string nome;
-            std::vector<uint16_t>
+            int tamanho;
 
-            while (arq >> id_1 >> id_2) {
-                continentes.push_back(a);
+            while (arq >> nome >> valor >> tamanho){
+                std::vector<uint16_t> ids;
+                for(int i = 0; i < tamanho; i++){
+                    arq >> ids[i];
+                }
+                continentes.push_back(Continente(nome, valor, ids));
             }
 
-            _divisas = divisas;
+            _continentes = continentes;
         }
 
 
