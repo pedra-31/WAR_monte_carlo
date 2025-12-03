@@ -1,7 +1,7 @@
 #ifndef DIVISA_HPP
 #define DIVISA_HPP
 #include <cstdint>
-
+#include <iostream>
 
 /**
  * @class Divisa
@@ -31,6 +31,8 @@ class Divisa {
          * @return true se possui / falso se não possui
          */
         bool tem_territorio(uint16_t id_territorio) const;
+
+        void info();
 
         /**
          * @brief Destrutor de Divisa

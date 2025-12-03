@@ -32,3 +32,13 @@
             // true se TODOS os vértices do continente estão em v
             return count == _vertices.size();
         }
+
+
+        void Continente::info(){
+            std::cout << "Nome: " << _nome << " Pontos conquista: " << _pontos_conquista << "\n" 
+                << "Vertices: ";
+            for(int i : _vertices){
+                std::cout << i << " ";
+            }
+            std::cout << "\n\n";
+        }

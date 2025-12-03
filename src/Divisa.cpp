@@ -20,6 +20,10 @@
             }
         }
 
+        void Divisa::info(){
+            std::cout << "(" << _v1 << "---" << _v2 << ")\n";
+        }
+
         Divisa::~Divisa(){
 
         }

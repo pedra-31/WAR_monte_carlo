@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <iostream>
 
 /**
  * @class Continente
@@ -26,15 +27,20 @@ class Continente {
 
     public:
 
+        /**
+         * @brief Construtor
+         */
         Continente(std::string nome, unsigned int pontos_conquista, std::vector<uint16_t> vertices);
 
+        //getters
         unsigned int get_pontos_conquista() const;
         const std::vector<uint16_t>& get_vertices() const;
         const std::string& get_nome() const;
 
 
         bool possui_territorios(const std::vector<uint16_t>& v) const;
-        
+
+        void info();
 };  
 
 
