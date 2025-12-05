@@ -32,12 +32,10 @@ class Divisa {
          */
         bool tem_territorio(uint16_t id_territorio) const;
 
-        void info();
-
         /**
-         * @brief Destrutor de Divisa
+         * @brief Imprime as informações da classe no cout
          */
-        ~Divisa();
+        void info();
 };
 
 

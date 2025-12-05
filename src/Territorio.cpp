@@ -27,7 +27,7 @@
         }
         void Territorio::set_tropas(unsigned int numero){
             if(numero < 1){
-                throw std::runtime_error("Territorio error: Em set_tropas(unsigned int numero), numero (parametro) deve ser MAIOR que 1");
+                throw std::runtime_error("Territorio::set_tropas(unsigned int numero): numero (parametro) deve ser MAIOR que 1");
             }
             _num_tropas = numero;
         }
@@ -47,13 +47,9 @@
 
         Territorio& Territorio::operator-=(unsigned int x) {
             if (_num_tropas - x < 1){
-                throw std::runtime_error("Territorio error: Em operator-=(unsigned int x), ao final da operação DEVE conter pelo menor 1 tropa posicionada em cada vértice");
+                throw std::runtime_error("Territorio::operator-=(unsigned int x): ao final da operação DEVE conter pelo menor 1 tropa posicionada em cada vértice");
             }
             
             _num_tropas -= x;
             return *this;
-        }
-
-        Territorio::~Territorio(){
-
         }

@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 
+class Jogador;
+
 /**
  * @class Continente
  * @brief Classe auxiliar, desenhada para representar os continentes do mapa
@@ -37,9 +39,15 @@ class Continente {
         const std::vector<uint16_t>& get_vertices() const;
         const std::string& get_nome() const;
 
+        /**
+         * @brief função que checa se um jogador possuí todos os territórios de um continente
+         * @return True se possui, False se não possui
+         */
+        bool possui_continente(Jogador j) const;
 
-        bool possui_territorios(const std::vector<uint16_t>& v) const;
-
+        /**
+         * @brief Imprime as informações da classe no cout
+         */
         void info();
 };  
 

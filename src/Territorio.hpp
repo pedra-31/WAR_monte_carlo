@@ -51,10 +51,6 @@ class Territorio {
          */
         Territorio& operator-=(unsigned int x);
 
-        /**
-         * @brief Destrutor de Territorio
-         */
-        ~Territorio();
 };
 
 

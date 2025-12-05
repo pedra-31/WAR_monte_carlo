@@ -15,7 +15,6 @@
             std::ifstream arq(caminho); 
             if (!arq) {
                 throw std::runtime_error("Arquivo nao pode ser aberto: " + caminho + "\n");
-                return;
             }
 
             std::string nome;
@@ -49,8 +48,7 @@
         void War::ler_continentes(const std::string& caminho){
             std::ifstream arq(caminho);
             if (!arq) {
-                std::cerr << "Arquivo nao pode ser aberto: " << caminho << "\n";
-                return;
+                throw std::runtime_error("Arquivo nao pode ser aberto: " + caminho + "\n");
             }
 
             std::vector<Continente> continentes;
@@ -60,15 +58,15 @@
 
             while (arq >> nome >> valor >> tamanho){
                 if (tamanho < 0) {
-                    std::cerr << "Tamanho negativo em continente " << nome << '\n';
-                    continue;
+                    throw std::runtime_error("Tamanho negativo em continente " + nome);
                 }
                 std::vector<uint16_t> ids;
                 for(int i = 0; i < tamanho; ++i){
+
+                    
                     uint16_t id;
                     if (!(arq >> id)) {
-                        std::cerr << "Erro de leitura de id para continente " << nome << '\n';
-                        break;
+                        throw std::runtime_error("Erro de leitura de id para continente " + nome);
                     }
                     ids.push_back(id);
                 }
@@ -98,9 +96,4 @@
             for(auto& t : _territorios){
                 t.info();
             }
-        }
-
-
-        War::~War(){
-
         }

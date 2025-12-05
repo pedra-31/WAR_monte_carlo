@@ -1,5 +1,5 @@
 #include "Continente.hpp"
-
+#include "Jogador.hpp"
 
         Continente::Continente(std::string nome, unsigned int pontos_conquista, std::vector<uint16_t> vertices):
         _nome(nome),
@@ -19,7 +19,8 @@
             return _nome;
         }
 
-        bool Continente::possui_territorios(const std::vector<uint16_t>& v) const{
+        bool Continente::possui_continente(Jogador j) const{
+            const std::vector<uint16_t>& v =  j.get_id_territorios();
             // Conta quantos vértices do continente aparecem no vetor v
             unsigned int count = 0;
 

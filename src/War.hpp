@@ -59,10 +59,7 @@ class War {
 
 
 
-        /**
-         * @brief Destrutor de War
-         */
-        ~War();
+
 };
 
 

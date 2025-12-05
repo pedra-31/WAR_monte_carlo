@@ -13,11 +13,22 @@ class Territorio;
  */
 class Jogador {
     private:
-
+        /**
+         * @brief Nome do jogador
+         */
         char _nome;
+        /**
+         * @brief Vetor das cartas que jogador possuí
+         */
         std::vector<char> _cartas;
-        std::vector<Territorio> _territorio;
-        unsigned int _rodada_cartas
+        /**
+         * @brief Vetor de territórios que jogador possuí
+         */
+        std::vector<Territorio> _territorios;
+        /**
+         * @brief contador das rodadas que jogador já trocou de cartas
+         */
+        unsigned int _rodada_cartas;
 
     public:
         /**
@@ -27,20 +38,27 @@ class Jogador {
         Jogador(char nome);
 
         //getters
-        char get_nome();
+        char get_nome() const;
+        
         /**
-         * @brief acha o territorio no vector de territorios e o retorna
+         * @brief devolva a lista de id_territorios que o jogador possui
+         * @return retorna um vector com os ids
+         */
+        const std::vector<uint16_t> get_id_territorios() const;
+
+        /**
+         * @brief acha o territorio no vector de territorios e o retorna para somente consulta 
          * @param id_territorio id do territorio 
          * @return retorna o objeto Territorio
          */
-        Territorio get_territorio(uint16_t id_territorio);
+        const Territorio get_territorio(uint16_t id_territorio) const;
 
         /**
          * @brief Checa se uma aresta possuim um territorio de id id_territorio
          * Joga exceção se já existe esse território em player 
-         * @param territorio t para ser adicionado
+         * @param territorio (objeto) para ser adicionado
          */
-        void adicionar_territorio(Territorio t);
+        void adicionar_territorio(Territorio territorio);
 
         /**
          * @brief Sorteia uma carta ao jogador e coloca no vector de cartas 
@@ -57,11 +75,6 @@ class Jogador {
          * @brief info de jogador e chama o info de territórios que possui
          */
         void info();
-
-        /**
-         * @brief Destrutor de Jogador
-         */
-        ~Jogador();
 };
 
 
