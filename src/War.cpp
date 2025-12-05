@@ -81,11 +81,8 @@
 
 
         void War::info(){
-            std::cout << "players restantes:" << _players << "\n\n"
-            << "Info territorios:" << "\n";
-            for(auto& t : _territorios){
-                t.info();
-            }
+            std::cout << "players restantes:" << _players << "\n\n";
+            info_territorios();
             std::cout << "\n\nInfo divisas:" << "\n";
             for(auto& d : _divisas){
                 d.info();
@@ -93,6 +90,13 @@
             std::cout << "\n\nInfo continentes:" << "\n";
             for(auto& c : _continentes){
                 c.info();
+            }
+        }
+
+        void War::info_territorios(){
+            std::cout << "Info territorios:" << "\n";
+            for(auto& t : _territorios){
+                t.info();
             }
         }
 

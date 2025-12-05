@@ -51,6 +51,7 @@ class War {
         void ler_continentes(const std::string& caminho);
 
         void info();
+        void info_territorios();
 
 
 
