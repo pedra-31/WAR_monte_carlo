@@ -1,10 +1,11 @@
 #include "War.hpp"
 #include "Territorio.hpp"
+#include "Jogador.hpp"
 #include "Divisa.hpp"
 #include "Continente.hpp"
 
-        War::War(int players) :
-        _players(players){
+        War::War(int num_jogadores) :
+        _num_jogadores(num_jogadores){
             ler_territorios("../data/territorios.txt");
             ler_divisas("../data/divisas.txt");
             ler_continentes("../data/continentes.txt");   
@@ -20,9 +21,17 @@
             std::string nome;
             uint16_t id;
             char player;
+            for(unsigned int i = 0; i < _num_jogadores; i++){
+                _jogadores.emplace_back(i+97);
+            }
 
             while (arq >> nome >> id >> player) {
-                _territorios.emplace_back(id, nome, player, 1);
+                for(auto& j : _jogadores){
+                    if(j.get_nome() == player){
+                        j.adicionar_territorio(Territorio(id, nome, player, 1));
+                        break;
+                    }
+                }
             }
         }
 
@@ -79,8 +88,12 @@
 
 
         void War::info(){
-            std::cout << "players restantes:" << _players << "\n\n";
-            info_territorios();
+            std::cout << "players restantes:" << _num_jogadores << "\n\n";
+            std::cout << "Info jogadores:" << "\n";
+            for(auto& j : _jogadores){
+                j.info();
+                std::cout << "\n\n";
+            }
             std::cout << "\n\nInfo divisas:" << "\n";
             for(auto& d : _divisas){
                 d.info();
@@ -93,7 +106,10 @@
 
         void War::info_territorios(){
             std::cout << "Info territorios:" << "\n";
-            for(auto& t : _territorios){
-                t.info();
+            for(auto& j : _jogadores){
+                j.info_territorios();
             }
         }
+
+
+        War::~War() = default;  

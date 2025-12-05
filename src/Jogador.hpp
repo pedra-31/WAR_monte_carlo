@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <random>
 
 class Territorio;
 
@@ -29,6 +30,11 @@ class Jogador {
          * @brief contador das rodadas que jogador já trocou de cartas
          */
         unsigned int _rodada_cartas;
+
+        /**
+         * @brief gerador de números aleatórios
+         */
+        std::mt19937 _gen;
 
     public:
         /**
@@ -63,7 +69,7 @@ class Jogador {
         /**
          * @brief Sorteia uma carta ao jogador e coloca no vector de cartas 
          */
-        void adicionar_cartas();
+        void sorteia_carta();
 
         /**
          * @brief Se for possível trocar cartas: devolve o numero de tropas + aumenta o contador _rodada_cartas
@@ -75,6 +81,12 @@ class Jogador {
          * @brief info de jogador e chama o info de territórios que possui
          */
         void info();
+
+        
+        /**
+         * @brief info de territórios que jogador possui
+         */
+        void info_territorios();
 };
 
 

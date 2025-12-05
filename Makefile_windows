@@ -1,8 +1,9 @@
-# Variáveis
-TARGET := build/main.exe
-
+# Compilador e flags
 GCC := g++
 GCCFLAGS := -Wall -Wextra -std=c++17
+
+# Executável de saída
+TARGET := build/main.exe
 
 # Lista de todos os .cpp 
 SRCS := \
@@ -10,8 +11,9 @@ SRCS := \
 	src/Divisa.cpp \
 	src/Territorio.cpp \
 	src/War.cpp \
+	src/Jogador.cpp \
 	src/main.cpp
-
+	
 # Transforma src/foo.cpp -> bin/foo.o
 OBJS := $(SRCS:src/%.cpp=bin/%.o)
 
@@ -19,16 +21,16 @@ all: $(TARGET)
 
 # Gerando o executável a partir dos .o
 $(TARGET): $(OBJS)
-	@mkdir -p build
+	if not exist build mkdir build
 	$(GCC) $(GCCFLAGS) $(OBJS) -o $(TARGET)
 
 # Compilando .cpp -> .o
 bin/%.o: src/%.cpp
-	@mkdir -p bin
+	if not exist bin mkdir bin
 	$(GCC) $(GCCFLAGS) -c $< -o $@
 
 clean:
-	rm -rf bin
-	rm -rf build
+	if exist bin rmdir /S /Q bin
+	if exist build rmdir /S /Q build
 
 .PHONY: all clean

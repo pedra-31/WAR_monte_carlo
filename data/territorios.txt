@@ -39,4 +39,4 @@ Brasil 504 a
 Sumatra 601 a 
 Bornéu 602 a 
 Nova_Guiné 603 a 
-Austrália 604 a 
+Austrália 604 b 

@@ -10,6 +10,7 @@
 class Territorio;
 class Divisa;
 class Continente;
+class Jogador;
 
 
 /**
@@ -22,7 +23,7 @@ class War {
         /**
          * @brief quantidade de jogadores ativos
          */
-        unsigned int _players;
+        unsigned int _num_jogadores;
 
         /**
          * @brief um mapa que contém os continentes e dentro de cada continente, seus id_territórios
@@ -32,7 +33,7 @@ class War {
         /**
          * @brief vector que contém todos os territorios (vértices)
          */
-        std::vector<Territorio> _territorios;
+        std::vector<Jogador> _jogadores;
 
         /**
          * @brief vector que contém todas as divisas (arestas) (grafo não orientado)
@@ -43,7 +44,7 @@ class War {
         /**
          * @brief Construtor de War lê os continentes
          */
-        War(int players);
+        War(int num_jogadores);
 
         //helpers de contrutor. Leêm do arquivo caminho
         void ler_territorios(const std::string& caminho);
@@ -55,10 +56,7 @@ class War {
 
 
 
-
-
-
-
+        ~War();   
 
 };
 

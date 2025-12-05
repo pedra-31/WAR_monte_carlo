@@ -1,0 +1,35 @@
+# Variáveis
+TARGET := build/main.exe
+
+GCC := g++
+GCCFLAGS := -Wall -Wextra -std=c++17
+
+# Lista de todos os .cpp 
+SRCS := \
+	src/Continente.cpp \
+	src/Divisa.cpp \
+	src/Territorio.cpp \
+	src/War.cpp \
+	src/Jogador.cpp \
+	src/main.cpp
+	
+# Transforma src/foo.cpp -> bin/foo.o
+OBJS := $(SRCS:src/%.cpp=bin/%.o)
+
+all: $(TARGET)
+
+# Gerando o executável a partir dos .o
+$(TARGET): $(OBJS)
+	@mkdir -p build
+	$(GCC) $(GCCFLAGS) $(OBJS) -o $(TARGET)
+
+# Compilando .cpp -> .o
+bin/%.o: src/%.cpp
+	@mkdir -p bin
+	$(GCC) $(GCCFLAGS) -c $< -o $@
+
+clean:
+	rm -rf bin
+	rm -rf build
+
+.PHONY: all clean
