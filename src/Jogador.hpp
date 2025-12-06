@@ -81,7 +81,6 @@ class Jogador {
          * @brief info de jogador e chama o info de territórios que possui
          */
         void info();
-
         
         /**
          * @brief info de territórios que jogador possui

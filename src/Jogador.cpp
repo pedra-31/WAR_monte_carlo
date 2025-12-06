@@ -101,7 +101,7 @@
 
         
     void Jogador::info(){
-        std::cout << "Jogador: " << _nome << "\nQuantidade de territorios: " << _territorios.size() << "\n\n";
+        std::cout << "Jogador: " << _nome << "\nQuantidade de territorios: " << _territorios.size() << "\nTerritorios:\n";
         info_territorios();
     }
 

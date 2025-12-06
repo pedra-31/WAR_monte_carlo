@@ -95,7 +95,8 @@
                 std::cout << "\n\n";
             }
             std::cout << "\n\nInfo divisas:" << "\n";
-            for(auto& d : _divisas){
+            for(auto& d
+                 : _divisas){
                 d.info();
             }
             std::cout << "\n\nInfo continentes:" << "\n";
