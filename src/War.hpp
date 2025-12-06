@@ -52,32 +52,23 @@ class War {
         void ler_continentes(const std::string& caminho);
 
         //getters
-        const Jogador get_jogador(char nome) const;
-        //Etapa 1 ------ Posicionar
-        /**
-         * @brief acha a quantidade de tropas que um jogador tem na rodada / troca as cartes de um certo jogador
-         * @param nome nome do jogador
-         * @return quantidade de tropas
-         */
-        unsigned int get_tropas(char nome);
+        Jogador get_jogador(char nome);
 
         /**
-         * @brief posiciona tropas do jogador no território 
-         * @param nome nome do jogador fazendo a ação
-         * @param id_territorio id do território para posicionar tropas
-         * @param quantidade quantidade de tropas para ser posicionada
+         * @brief Simula um ataque em um território, se ganha faz o reposicionamento
+         * @param nome_defensor+ nome do jogador defendendo o territorio
+         * @param nome_atacante nome do jogador atacando o territorio
+         * @param id_territorio id do território onde ocorre a batalha
          */
-        void posicionar_tropa(char nome, uint16_t id_territorio, unsigned int quantidade);
+        void simular_ataque(char nome_defensor, char nome_atacante, uint16_t id_territorio);
 
         /**
-         * @brief posiciona tropas do jogador no território 
-         * @param nome nome do jogador fazendo a ação
-         * @param nome_territorio nome do território para posicionar tropas
-         * @param quantidade quantidade de tropas para ser posicionada
+         * @brief Faz a troca de territórios (usado só para players reais), a quantidade de tropas cai para 1
+         * @param nome_defensor nome do jogador defendendo o territorio
+         * @param nome_atacante nome do jogador atacando o territorio
+         * @param id_territorio id do território onde ocorreu a batalha
          */
-        void posicionar_tropa(char nome, const std::string& nome_territorio, unsigned int quantidade);
-
-        //Etapa 1 ------ Atacar
+        void recebe_territorio(char nome_defensor, char nome_atacante, uint16_t id_territorio);
 
         /**
          * @brief info do jogo no cout, chama todos os infos de classes componentes

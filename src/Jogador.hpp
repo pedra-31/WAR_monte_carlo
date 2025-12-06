@@ -86,6 +86,41 @@ class Jogador {
          * @brief info de territórios que jogador possui
          */
         void info_territorios();
+        
+        /**
+         * @brief acha a quantidade de tropas que um jogador tem na rodada / troca as cartes de um certo jogador
+         * @return quantidade de tropas
+         */
+        uint16_t get_tropas();
+
+        /**
+         * @brief posiciona tropas do jogador no território 
+         * @param id_territorio id do território para posicionar tropas
+         * @param quantidade quantidade de tropas para ser posicionada
+         */
+        void posicionar_tropa(uint16_t id_territorio, unsigned int quantidade);
+        
+        /**
+         * @brief posiciona tropas do jogador no território 
+         * @param nome_territorio nome do território para posicionar tropas
+         * @param quantidade quantidade de tropas para ser posicionada
+         */
+        void posicionar_tropa(const std::string& nome_territorio, unsigned int quantidade);
+
+        /**
+         * @brief Ao final de uma rodada de um jogador faz o reposicionamento de tropas 
+         * @param origem_territorio nome do território de origem 
+         * @param destino_territorio nome do território de destino das tropas 
+         * @param quantidade quantidade de tropas para ser reposicionada
+         */
+        void reposicionar_tropa(const std::string& origem_territorio, const std::string& destino_territorio, unsigned int quantidade);
+        /**
+         * @brief Ao final de uma rodada de um jogador faz o reposicionamento de tropas 
+         * @param id_origem_territorio id do território de origem 
+         * @param id_destino_territorio id do território de destino das tropas 
+         * @param quantidade quantidade de tropas para ser posicionada
+         */
+        void reposicionar_tropa(uint16_t id_origem_territorio, uint16_t id_destino_territorio, unsigned int quantidade);
 };
 
 

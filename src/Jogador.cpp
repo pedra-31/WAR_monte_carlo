@@ -111,3 +111,25 @@
         }
     }
 
+        uint16_t Jogador::get_tropas(){
+                return uint16_t(_territorios.size()/2) + trocar_cartas();
+        }
+
+        void Jogador::posicionar_tropa(uint16_t id_territorio, unsigned int quantidade){
+                for(auto& t : _territorios){
+                        if(t.get_id() == id_territorio){
+                                t += quantidade;
+                        }
+                }
+                throw std::runtime_error("Jogador::posicionar_tropa(uint16_t id_territorio, unsigned int quantidade) Território não encontrado");
+        }
+
+
+        void Jogador::posicionar_tropa(const std::string& nome_territorio, unsigned int quantidade){
+                for(auto& t : _territorios){
+                        if(t.get_nome() == nome_territorio){
+                                t += quantidade;
+                        }
+                }
+                throw std::runtime_error("Jogador::posicionar_tropa(const std::string& nome_territorio, unsigned int quantidade) Território não encontrado");
+        }
