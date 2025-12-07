@@ -20,6 +20,13 @@
             }
         }
 
+        bool Divisa::tem_adjacencia(uint16_t id1, uint16_t id2) const{
+            if((_v1 == id1 || _v1 == id2) && (_v2 == id1 || _v2 == id2)){
+                return true;
+            }
+            return false;
+        }
+
         void Divisa::info(){
             std::cout << "(" << _v1 << "---" << _v2 << ")\n";
         }

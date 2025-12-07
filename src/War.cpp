@@ -85,6 +85,42 @@
             _continentes = std::move(continentes);
         }
 
+        void War::recebe_territorio(char nome_atacante, const std::string& nome_territorio_defensor, const std::string& nome_territorio_atacante){
+            Jogador* j_defensor = nullptr;
+            Jogador* j_atacante = nullptr;
+
+            for(auto& j : _jogadores){
+                if(j.get_nome() == nome_atacante){
+                    j_atacante = &j;
+                }
+            }
+            if(j_atacante == nullptr){
+                throw std::runtime_error("void War::recebe_territorio(char nome_atacante, ...): Não existe jogador com nome_atacante: " + nome_atacante);
+            }
+
+            for (auto& j : _jogadores){
+                for(auto& t : j.get_nome_territorios()){
+                    if(t == nome_territorio_defensor){
+                        j_defensor = &j;
+                        if(j.get_nome() == j_atacante->get_nome()){
+                            throw std::runtime_error("void War::recebe_territorio(): nome_defensor == nome_atacante");
+                        }
+                        //para não ficar fazendo umas 30 funções auxiliares eu fiz essa maravilha de código, entenda se quiser...
+                        j_atacante->adicionar_territorio(
+                            j.remover_territorio(
+                                j_defensor->get_territorio(nome_territorio_defensor)->get_id()));
+                        return; 
+                    }
+                }
+            }
+
+            if(j_defensor == nullptr){
+                throw std::runtime_error("void War::recebe_territorio(...): Não existe território com o nome: " + nome_territorio_defensor);
+            }
+
+            
+        }
+
 
 
         void War::info(){

@@ -1,5 +1,6 @@
 #include "Jogador.hpp"
 #include "Territorio.hpp"
+#include "Divisa.hpp"
 
         
         Jogador::Jogador(char nome) : 
@@ -20,11 +21,18 @@
                 }
                 return lista;
         }
+        const std::vector<std::string> Jogador::get_nome_territorios() const{
+                std::vector<std::string> lista;
+                for(auto& t : _territorios){
+                        lista.push_back(t.get_nome());
+                }
+                return lista;
+        }
 
-        const Territorio Jogador::get_territorio(uint16_t id_territorio) const{
+        const Territorio* Jogador::get_territorio(uint16_t id_territorio){
                 for(auto& t : _territorios){
                         if(t.get_id() == id_territorio){
-                                return t;
+                                return &t;
                         }
                 }
                 throw std::runtime_error("Jogador::get_territorio(uint16_t id_territorio): Não foi encontrado esse território em jogador " + _nome);
@@ -39,6 +47,19 @@
                 }
                 _territorios.push_back(territorio);
         }
+
+        Territorio Jogador::remover_territorio(uint16_t id_territorio) {
+                for (auto it = _territorios.begin(); it != _territorios.end(); ++it) {
+                        if (it->get_id() == id_territorio){
+                                Territorio removido = *it;   // faz a cópia
+                                _territorios.erase(it);      // remove do vetor
+                                return removido;             // devolve a cópia
+                        }
+                }
+
+                throw std::runtime_error("Jogador::remover_territorio(uint16_t id_territorio): Esse território não pertence ao jogador " + _nome);
+        }
+
 
 
         void Jogador::sorteia_carta(){
@@ -133,3 +154,92 @@
                 }
                 throw std::runtime_error("Jogador::posicionar_tropa(const std::string& nome_territorio, unsigned int quantidade) Território não encontrado");
         }
+
+        void Jogador::reposicionar_tropa(const std::string& origem_territorio, const std::string& destino_territorio, unsigned int quantidade, const std::vector<Divisa>& divisas){
+                Territorio* origem_t = nullptr;
+                for(auto& t : _territorios){
+                        if(t.get_nome() == origem_territorio){
+                                origem_t = &t;
+                                break;
+                        }
+                }
+                if(origem_t == nullptr){
+                        throw std::runtime_error("Jogador::reposicionar_tropa(const std::string& origem_territorio, ...): Jogador não possui territorio origem_territorio");
+                }
+                if(origem_t->get_num_tropas() - quantidade < 1){
+                        throw std::runtime_error("Jogador::reposicionar_tropa(const std::string& origem_territorio, ...): Em origem_territorio, não há tropas suficientes para fazer o reposicionamento");              
+                }
+
+                Territorio* destino_t = nullptr;
+                for(auto& t : _territorios){
+                        if(t.get_nome() == destino_territorio){
+                                destino_t = &t;
+                                break;
+                        }
+                }
+                if(destino_t == nullptr){
+                        throw std::runtime_error("Jogador::reposicionar_tropa(..., const std::string& destino_territorio, ...): Jogador não possui territorio destino_territorio");
+                }
+
+                bool possui_adjacencia = false;
+
+                for(auto& d : divisas){
+                        if(d.tem_adjacencia(origem_t->get_id(), destino_t->get_id())){
+                                possui_adjacencia = true;
+                                break;
+                        }
+                }
+                
+                if(!possui_adjacencia){
+                        throw std::runtime_error("Jogador::reposicionar_tropa(... divisas): Não há adjacencia");              
+                }
+
+                origem_t -= quantidade;
+                destino_t += quantidade;
+
+        }
+
+        void Jogador::reposicionar_tropa(uint16_t id_origem_territorio, uint16_t id_destino_territorio, unsigned int quantidade, const std::vector<Divisa>& divisas){
+                Territorio* origem_t = nullptr;
+                for(auto& t : _territorios){
+                        if(t.get_id() == id_origem_territorio){
+                                origem_t = &t;
+                                break;
+                        }
+                }
+                if(origem_t == nullptr){
+                        throw std::runtime_error("Jogador::reposicionar_tropa(const std::string& origem_territorio, ...): Jogador não possui territorio origem_territorio");
+                }
+                if(origem_t->get_num_tropas() - quantidade < 1){
+                        throw std::runtime_error("Jogador::reposicionar_tropa(const std::string& origem_territorio, ...): Em origem_territorio, não há tropas suficientes para fazer o reposicionamento");              
+                }
+
+                Territorio* destino_t = nullptr;
+                for(auto& t : _territorios){
+                        if(t.get_id() == id_destino_territorio){
+                                destino_t = &t;
+                                break;
+                        }
+                }
+                if(destino_t == nullptr){
+                        throw std::runtime_error("Jogador::reposicionar_tropa(..., const std::string& destino_territorio, ...): Jogador não possui territorio destino_territorio");
+                }
+
+                bool possui_adjacencia = false;
+
+                for(auto& d : divisas){
+                        if(d.tem_adjacencia(origem_t->get_id(), destino_t->get_id())){
+                                possui_adjacencia = true;
+                                break;
+                        }
+                }
+                
+                if(!possui_adjacencia){
+                        throw std::runtime_error("Jogador::reposicionar_tropa(... divisas): Não há adjacencia");              
+                }
+
+                origem_t -= quantidade;
+                destino_t += quantidade;
+
+        }
+

@@ -53,6 +53,10 @@ class War {
 
         //getters
         Jogador get_jogador(char nome);
+        const std::vector<uint16_t>& get_divisas() const;
+
+
+        std::vector<uint16_t> get_id_territorios_adjacentes(uint16_t id_territorio);
 
         /**
          * @brief Simula um ataque em um território, se ganha faz o reposicionamento
@@ -64,11 +68,12 @@ class War {
 
         /**
          * @brief Faz a troca de territórios (usado só para players reais), a quantidade de tropas cai para 1
-         * @param nome_defensor nome do jogador defendendo o territorio
+         * @param nome_atacante nome do jogador defendendo o territorio
          * @param nome_atacante nome do jogador atacando o territorio
-         * @param id_territorio id do território onde ocorreu a batalha
+         * @param nome_territorio_defensor nome do território onde ocorreu a batalha
+         * @param nome_territorio_atacante nome do território de onde o atacante iniciou a batalha
          */
-        void recebe_territorio(char nome_defensor, char nome_atacante, uint16_t id_territorio);
+        void recebe_territorio(char nome_atacante, const std::string& nome_territorio_atacado, const std::string& nome_territorio_atacante);
 
         /**
          * @brief info do jogo no cout, chama todos os infos de classes componentes

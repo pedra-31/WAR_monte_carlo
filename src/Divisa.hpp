@@ -33,6 +33,14 @@ class Divisa {
         bool tem_territorio(uint16_t id_territorio) const;
 
         /**
+         * @brief Checa se ids possuim adjacencia entre si
+         * @param id1 id1 do territorio para ser procurado
+         * @param id2 id2 do territorio para ser procurado
+         * @return true se possui / falso se não possui
+         */
+        bool tem_adjacencia(uint16_t id1, uint16_t id2) const;
+
+        /**
          * @brief Imprime as informações da classe no cout
          */
         void info();
