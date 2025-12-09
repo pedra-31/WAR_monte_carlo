@@ -7,6 +7,7 @@
 #include <random>
 
 class Territorio;
+class Divisa;
 
 /**
  * @class Jogador
@@ -63,14 +64,14 @@ class Jogador {
          * @param id_territorio id do territorio 
          * @return retorna um ponteiro para Territorio
          */
-        const Territorio* get_territorio(uint16_t id_territorio);
+        Territorio* get_territorio(uint16_t id_territorio);
 
         /**
-         * @brief acha o territorio no vector de territorios e o retorna para somente consulta 
+         * @brief acha o territorio no vector de territorios e o retorna
          * @param nome_territorio nome do territorio para ser encontrado
          * @return retorna um ponteiro para Territorio
          */
-        const Territorio* get_territorio(const std::string& nome_territorio);
+        Territorio* get_territorio(const std::string& nome_territorio);
 
         /**
          * @brief Checa se uma aresta possuim um territorio de id id_territorio
@@ -134,7 +135,7 @@ class Jogador {
          * @param quantidade quantidade de tropas para ser reposicionada
          * @param divisas lista das divisas existentes em War
          */
-        void Jogador::reposicionar_tropa(const std::string& origem_territorio, const std::string& destino_territorio, unsigned int quantidade, const std::vector<Divisa>& divisas);
+        void reposicionar_tropa(const std::string& origem_territorio, const std::string& destino_territorio, unsigned int quantidade, const std::vector<Divisa>& divisas);
         /**
          * @brief Ao final de uma rodada de um jogador faz o reposicionamento de tropas 
          * @param id_origem_territorio id do território de origem 

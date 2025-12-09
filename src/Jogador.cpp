@@ -29,13 +29,22 @@
                 return lista;
         }
 
-        const Territorio* Jogador::get_territorio(uint16_t id_territorio){
+        Territorio* Jogador::get_territorio(uint16_t id_territorio){
                 for(auto& t : _territorios){
                         if(t.get_id() == id_territorio){
                                 return &t;
                         }
                 }
                 throw std::runtime_error("Jogador::get_territorio(uint16_t id_territorio): Não foi encontrado esse território em jogador " + _nome);
+        }
+
+        Territorio* Jogador::get_territorio(const std::string& nome_territorio){
+                for(auto& t : _territorios){
+                        if(t.get_nome() == nome_territorio){
+                                return &t;
+                        }
+                }
+                throw std::runtime_error("Jogador::get_territorio(const std::string& nome_territorio): Não foi encontrado esse território em jogador " + _nome);
         }
 
 

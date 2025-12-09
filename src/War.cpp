@@ -85,6 +85,12 @@
             _continentes = std::move(continentes);
         }
 
+        Territorio* War::get_territorio(const std::string& nome){
+            for(auto& j : _jogadores){
+                return j.get_territorio(nome);
+            }
+        }
+
         void War::recebe_territorio(char nome_atacante, const std::string& nome_territorio_defensor, const std::string& nome_territorio_atacante){
             Jogador* j_defensor = nullptr;
             Jogador* j_atacante = nullptr;
@@ -106,9 +112,11 @@
                             throw std::runtime_error("void War::recebe_territorio(): nome_defensor == nome_atacante");
                         }
                         //para não ficar fazendo umas 30 funções auxiliares eu fiz essa maravilha de código, entenda se quiser...
-                        j_atacante->adicionar_territorio(
-                            j.remover_territorio(
-                                j_defensor->get_territorio(nome_territorio_defensor)->get_id()));
+                        Territorio territorio = j.remover_territorio(j_defensor->get_territorio(nome_territorio_defensor)->get_id());
+                        //seta as tropas para 1
+                        territorio.set_tropas(1);
+                        //adiciona o territorio em j_atacante
+                        j_atacante->adicionar_territorio(territorio);
                         return; 
                     }
                 }
