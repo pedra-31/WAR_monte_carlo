@@ -33,6 +33,7 @@ int main() {
             iss >> nome_territorio; iss >> quant_tropas;
 
             *main_war.get_territorio(nome_territorio) += quant_tropas;
+            
         } else if(comando == "adicionar_tropas"){
             std::string nome_territorio; uint16_t quant_tropas;
             iss >> nome_territorio; iss >> quant_tropas;
