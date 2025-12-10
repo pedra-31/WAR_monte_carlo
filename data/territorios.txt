@@ -35,7 +35,7 @@ Madagascar 406 a
 Venezuela 501 a 
 Peru 502 a 
 Argentina 503 a 
-Brasil 504 a 
+Brasil 504 b 
 Sumatra 601 b 
 Bornéu 602 b 
 Nova_Guiné 603 b 

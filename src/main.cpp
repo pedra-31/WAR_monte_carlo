@@ -52,10 +52,12 @@ int main() {
             } catch(const std::runtime_error& e){
                 std::cout << e.what() <<"\n";
             }
+        } else if(comando == "TESTE"){
+            auto lista = main_war.get_id_territorios_adjacentes_com_inimigos('b');
+            for(auto& i : lista){
+                std::cout << i << "\n";
+            }
         }
-        
-        
-        
         
         
         

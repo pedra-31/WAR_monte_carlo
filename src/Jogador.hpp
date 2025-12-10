@@ -48,6 +48,12 @@ class Jogador {
         char get_nome() const;
         
         /**
+         * @brief devolva a lista de territorios que o jogador possui
+         * @return retorna um vector com o objeto de territorios
+         */
+        const std::vector<Territorio>& get_territorios() const;
+
+        /**
          * @brief devolva a lista de id_territorios que o jogador possui
          * @return retorna um vector com os ids
          */

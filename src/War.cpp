@@ -111,12 +111,55 @@
             return nullptr;
         }
 
+        Jogador War::get_jogador(char jogador){
+            for(auto& j : _jogadores){
+                if(j.get_nome() == jogador){
+                    return j;
+                }
+            }
+            throw std::runtime_error("War::get_jogador(char jogador): Não existe jogador com esse nome");
+        }
+
         std::vector<uint16_t> War::get_id_territorios_adjacentes(uint16_t id_territorio){
             std::vector<uint16_t> lista;
+
+            for(auto& d : _divisas){
+                if(d.tem_territorio(id_territorio)){
+                    if(d.get_v1() == id_territorio){
+                        lista.push_back(d.get_v2());
+                    } else {
+                        lista.push_back(d.get_v1());
+                    }
+                }
+            }
+
             if(!lista.empty()){
                 return lista;
             } else {
                 throw std::runtime_error("War::get_id_territorios_adjacentes(uint16_t id_territorio): id_territorio nao e um territorio valido");
+            }
+        }
+
+        std::vector<uint16_t> War::get_id_territorios_adjacentes_com_inimigos(char jogador){
+            std::vector<uint16_t> lista;
+
+            Jogador j = this->get_jogador(jogador);
+            auto t_jogador = j.get_id_territorios();
+
+            for(auto& t : j.get_id_territorios()){
+                for(auto& t_adj : this->get_id_territorios_adjacentes(t)){
+                    if(
+                        !(std::find(t_jogador.begin(), t_jogador.end(), t_adj) != t_jogador.end()) && //Se t_adj não é de player e 
+                        !(std::find(lista.begin(), lista.end(), t_adj) != lista.end()) //já não foi colocado na lista
+                    ){
+                        lista.push_back(t_adj);
+                    }
+                }
+            }
+            if(!lista.empty()){
+                return lista;
+            } else {
+                throw std::runtime_error("War::get_id_territorios_adjacentes_com_inimigos(char jogador): Algum erro estranho");
             }
         }
 

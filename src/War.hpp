@@ -6,6 +6,7 @@
 #include <string>
 #include <cstdint>
 #include <fstream>
+#include <algorithm>
 
 class Territorio;
 class Divisa;
@@ -70,10 +71,10 @@ class War {
 
         /**
          * @brief Retorna a lista de id territórios que fazem fronteira com territórios inimigos;
-         * @param player nome do player para a ação
+         * @param jogador nome do jogador para a ação
          * @return Retorna a lista de ids
          */
-        std::vector<uint16_t> get_id_territorios_adjacentes_inimigos(char player);
+        std::vector<uint16_t> get_id_territorios_adjacentes_com_inimigos(char jogador);
 
         /**
          * @brief Faz a troca de territórios (usado só para players reais), a quantidade de tropas cai para 1
