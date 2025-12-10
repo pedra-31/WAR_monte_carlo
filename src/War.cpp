@@ -89,9 +89,10 @@
             for(auto& j : _jogadores){
                 return j.get_territorio(nome);
             }
+            return nullptr;
         }
 
-        void War::recebe_territorio(char nome_atacante, const std::string& nome_territorio_defensor, const std::string& nome_territorio_atacante){
+        void War::recebe_territorio(char nome_atacante, const std::string& nome_territorio_defensor){
             Jogador* j_defensor = nullptr;
             Jogador* j_atacante = nullptr;
 
@@ -115,6 +116,7 @@
                         Territorio territorio = j.remover_territorio(j_defensor->get_territorio(nome_territorio_defensor)->get_id());
                         //seta as tropas para 1
                         territorio.set_tropas(1);
+                        territorio.set_player(j_atacante->get_nome());
                         //adiciona o territorio em j_atacante
                         j_atacante->adicionar_territorio(territorio);
                         return; 

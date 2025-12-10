@@ -63,12 +63,10 @@ class War {
 
         /**
          * @brief Faz a troca de territórios (usado só para players reais), a quantidade de tropas cai para 1
-         * @param nome_atacante nome do jogador defendendo o territorio
-         * @param nome_atacante nome do jogador atacando o territorio
-         * @param nome_territorio_defensor nome do território onde ocorreu a batalha
-         * @param nome_territorio_atacante nome do território de onde o atacante iniciou a batalha
+         * @param nome_atacante nome do jogador atacando o territorio (que vai receber o territorio)
+         * @param nome_territorio_atacado nome do território onde ocorreu a batalha
          */
-        void recebe_territorio(char nome_atacante, const std::string& nome_territorio_atacado, const std::string& nome_territorio_atacante);
+        void recebe_territorio(char nome_atacante, const std::string& nome_territorio_atacado);
 
         /**
          * @brief info do jogo no cout, chama todos os infos de classes componentes

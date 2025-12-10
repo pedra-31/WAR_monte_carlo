@@ -21,23 +21,38 @@ int main() {
 
 
         if(comando == "ajuda" || comando == "help"){
-            std::cout << "\najuda/help - Mostra todos os comandos disponiveis\n" 
-                << "";
+            std::cout << "\najuda/help - Mostra todos os comandos disponiveis\n\n" 
+                << "info - Mostra informações do jogo\n\n"
+                << "info_territorios - Mostra informações do territorio\n\n"
+                << "adicionar_tropas [territorio] [tropas] - \nAdiciona tropas em um certo territorio de nome [territorio] com [tropas] como quantidade de tropas\n\n"
+                << "trocar_territorio [player] [territorio] - \nEntrega um territorio de nome [territorio] para o player de nome [player]\n\n";
 
         } else if(comando == "info"){
             main_war.info();
+            
         } else if(comando == "info_territorios"){
             main_war.info_territorios();
+
         } else if(comando == "adicionar_tropas"){
             std::string nome_territorio; uint16_t quant_tropas;
             iss >> nome_territorio; iss >> quant_tropas;
+            try{
+                *main_war.get_territorio(nome_territorio) += quant_tropas;
+            }
+            catch(const std::runtime_error& e){
+                std::cout << e.what() << "\n";
+            }
 
-            *main_war.get_territorio(nome_territorio) += quant_tropas;
-        } else if(comando == "adicionar_tropas"){
-            std::string nome_territorio; uint16_t quant_tropas;
-            iss >> nome_territorio; iss >> quant_tropas;
+        } else if(comando == "trocar_territorio"){
+            char nome_player; std::string nome_territorio;
+            iss >> nome_player; iss >> nome_territorio;
 
-            *main_war.get_territorio(nome_territorio) += quant_tropas;
+            try{
+                main_war.recebe_territorio(nome_player, nome_territorio);
+            }
+            catch(const std::runtime_error& e){
+                std::cout << e.what() << "\n";
+            }
         }
         
         
