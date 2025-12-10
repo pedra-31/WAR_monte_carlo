@@ -57,13 +57,26 @@ class War {
 
 
         Territorio* get_territorio(const std::string& nome);
+        Territorio* get_territorio(uint16_t id_territorio);
 
 
+        /**
+         * @brief Encontra todos os ids territórios adjacentes ao território parametro
+         * @param id_territorio id do territorio para buscar territorios adjacentes
+         * @return Retorna a lista de ids
+         */
         std::vector<uint16_t> get_id_territorios_adjacentes(uint16_t id_territorio);
 
         /**
+         * @brief Retorna a lista de id territórios que fazem fronteira com territórios inimigos;
+         * @param player nome do player para a ação
+         * @return Retorna a lista de ids
+         */
+        std::vector<uint16_t> get_id_territorios_adjacentes_inimigos(char player);
+
+        /**
          * @brief Faz a troca de territórios (usado só para players reais), a quantidade de tropas cai para 1
-         * @param nome_atacante nome do jogador atacando o territorio (que vai receber o territorio)
+         * @param nome_atacante nome do jogador atacando o territorio
          * @param nome_territorio_atacado nome do território onde ocorreu a batalha
          */
         void recebe_territorio(char nome_atacante, const std::string& nome_territorio_atacado);

@@ -85,11 +85,27 @@
             _continentes = std::move(continentes);
         }
 
+        Territorio* War::get_territorio(uint16_t id_territorio){
+            for(auto& j : _jogadores){
+                return j.get_territorio(id_territorio);
+            }
+            return nullptr;
+        }
+
         Territorio* War::get_territorio(const std::string& nome){
             for(auto& j : _jogadores){
                 return j.get_territorio(nome);
             }
             return nullptr;
+        }
+
+        std::vector<uint16_t> War::get_id_territorios_adjacentes(uint16_t id_territorio){
+            std::vector<uint16_t> lista;
+            if(!lista.empty()){
+                return lista;
+            } else {
+                throw std::runtime_error("War::get_id_territorios_adjacentes(uint16_t id_territorio): id_territorio não é um território valido");
+            }
         }
 
         void War::recebe_territorio(char nome_atacante, const std::string& nome_territorio_defensor){

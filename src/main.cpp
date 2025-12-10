@@ -46,6 +46,11 @@ int main() {
         } else if(comando == "trocar_territorio"){
             char nome_player; std::string nome_territorio;
             iss >> nome_player; iss >> nome_territorio;
+            *main_war.get_territorio(nome_territorio) += quant_tropas;
+            
+        } else if(comando == "adicionar_tropas"){
+            std::string nome_territorio; uint16_t quant_tropas;
+            iss >> nome_territorio; iss >> quant_tropas;
 
             try{
                 main_war.recebe_territorio(nome_player, nome_territorio);

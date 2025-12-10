@@ -36,7 +36,7 @@ Venezuela 501 a
 Peru 502 a 
 Argentina 503 a 
 Brasil 504 a 
-Sumatra 601 a 
-Bornéu 602 a 
-Nova_Guiné 603 a 
+Sumatra 601 b 
+Bornéu 602 b 
+Nova_Guiné 603 b 
 Austrália 604 b 
