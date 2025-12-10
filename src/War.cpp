@@ -87,14 +87,26 @@
 
         Territorio* War::get_territorio(uint16_t id_territorio){
             for(auto& j : _jogadores){
-                return j.get_territorio(id_territorio);
+                try{
+                    return j.get_territorio(id_territorio);
+                } catch(const std::runtime_error& e){
+
+                } catch(...){
+                    std::cout << "Erro inesperado em War::get_territorio(uint16_t id_territorio)\n";
+                }
             }
             return nullptr;
         }
 
         Territorio* War::get_territorio(const std::string& nome){
             for(auto& j : _jogadores){
-                return j.get_territorio(nome);
+                try{
+                    return j.get_territorio(nome);
+                } catch(const std::runtime_error& e){
+
+                }  catch(...){
+                    std::cout << "Erro inesperado em War::get_territorio(const std::string& nome)\n";
+                }
             }
             return nullptr;
         }
@@ -104,8 +116,12 @@
             if(!lista.empty()){
                 return lista;
             } else {
-                throw std::runtime_error("War::get_id_territorios_adjacentes(uint16_t id_territorio): id_territorio não é um território valido");
+                throw std::runtime_error("War::get_id_territorios_adjacentes(uint16_t id_territorio): id_territorio nao e um territorio valido");
             }
+        }
+
+        unsigned int War::get_num_jogadores(){
+            return _num_jogadores;
         }
 
         void War::recebe_territorio(char nome_atacante, const std::string& nome_territorio_defensor){

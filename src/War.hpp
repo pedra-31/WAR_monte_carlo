@@ -53,6 +53,7 @@ class War {
 
         //getters
         Jogador get_jogador(char nome);
+        unsigned int get_num_jogadores();
         const std::vector<uint16_t>& get_divisas() const;
 
 
