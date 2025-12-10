@@ -2,7 +2,10 @@
 #include "Jogador.hpp"
 
     MonteCarloWar::MonteCarloWar(const War& war_original)
-        : _war(war_original) {}
+        : _war(war_original),
+        _gen(std::random_device{}()) {
+
+    }   
 
     void MonteCarloWar::simular_rodada(){
         return;

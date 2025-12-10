@@ -21,6 +21,11 @@ class MonteCarloWar{
         */
         War _war;
 
+        /**
+         * @brief gerador de números aleatórios
+         */
+        std::mt19937 _gen;
+
     public:
 
         /**
