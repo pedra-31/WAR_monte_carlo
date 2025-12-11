@@ -2,8 +2,12 @@
 #include <sstream>
 #include <string>
 
+#include "MonteCarloWar.hpp"
+#include "Jogador.hpp"
 #include "War.hpp"
-#include "Territorio.hpp"
+#include "Continente.hpp"   
+#include "Divisa.hpp"   
+#include "Territorio.hpp" 
 
 
 int main() {
@@ -53,15 +57,12 @@ int main() {
                 std::cout << e.what() <<"\n";
             }
         } else if(comando == "TESTE"){
-            auto lista = main_war.get_id_territorios_adjacentes_com_inimigos('b');
-            for(auto& i : lista){
-                std::cout << i << "\n";
-            }
-        }
-        
-        
-        
-        else {
+            MonteCarloWar mc_war(main_war);
+            mc_war.get_war()->info_territorios();
+            mc_war.posicionar_tropas('a');
+            mc_war.get_war()->info_territorios();
+            
+        } else {
             std::cout << "comando invalido" << std::endl;
         }
     }

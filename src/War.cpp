@@ -11,7 +11,6 @@
             ler_continentes("../data/continentes.txt");   
         }
 
-
         void War::ler_territorios(const std::string& caminho){
             std::ifstream arq(caminho); 
             if (!arq) {
@@ -34,7 +33,6 @@
                 }
             }
         }
-
 
         void War::ler_divisas(const std::string& caminho){
             std::ifstream arq(caminho);
@@ -85,6 +83,8 @@
             _continentes = std::move(continentes);
         }
 
+
+
         Territorio* War::get_territorio(uint16_t id_territorio){
             for(auto& j : _jogadores){
                 try{
@@ -111,10 +111,10 @@
             return nullptr;
         }
 
-        Jogador War::get_jogador(char jogador){
+        Jogador* War::get_jogador(char jogador){
             for(auto& j : _jogadores){
                 if(j.get_nome() == jogador){
-                    return j;
+                    return &j;
                 }
             }
             throw std::runtime_error("War::get_jogador(char jogador): Não existe jogador com esse nome");
@@ -143,16 +143,16 @@
         std::vector<uint16_t> War::get_id_territorios_adjacentes_com_inimigos(char jogador){
             std::vector<uint16_t> lista;
 
-            Jogador j = this->get_jogador(jogador);
-            auto t_jogador = j.get_id_territorios();
+            Jogador* j = this->get_jogador(jogador);
+            auto t_jogador = j->get_id_territorios();
 
-            for(auto& t : j.get_id_territorios()){
-                for(auto& t_adj : this->get_id_territorios_adjacentes(t)){
+            for(auto& t : j->get_id_territorios()){ //t representa um id_territorio em _territorios de player
+                for(auto& t_adj : this->get_id_territorios_adjacentes(t)){ //t_adj é o id_territorio adjacente de um t
                     if(
                         !(std::find(t_jogador.begin(), t_jogador.end(), t_adj) != t_jogador.end()) && //Se t_adj não é de player e 
-                        !(std::find(lista.begin(), lista.end(), t_adj) != lista.end()) //já não foi colocado na lista
+                        !(std::find(lista.begin(), lista.end(), t) != lista.end()) //já não foi colocado na lista
                     ){
-                        lista.push_back(t_adj);
+                        lista.push_back(t);
                     }
                 }
             }
@@ -166,6 +166,8 @@
         unsigned int War::get_num_jogadores(){
             return _num_jogadores;
         }
+
+
 
         void War::recebe_territorio(char nome_atacante, const std::string& nome_territorio_defensor){
             Jogador* j_defensor = nullptr;

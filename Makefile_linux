@@ -11,6 +11,7 @@ SRCS := \
 	src/Territorio.cpp \
 	src/War.cpp \
 	src/Jogador.cpp \
+	src/MonteCarloWar.cpp \
 	src/main.cpp
 	
 # Transforma src/foo.cpp -> bin/foo.o

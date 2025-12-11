@@ -153,9 +153,10 @@
                 for(auto& t : _territorios){
                         if(t.get_id() == id_territorio){
                                 t += quantidade;
+                                return;
                         }
                 }
-                throw std::runtime_error("Jogador::posicionar_tropa(uint16_t id_territorio, unsigned int quantidade) Território não encontrado");
+                // throw std::runtime_error("Jogador::posicionar_tropa(uint16_t id_territorio, unsigned int quantidade) Território não encontrado");
         }
 
 
@@ -163,6 +164,7 @@
                 for(auto& t : _territorios){
                         if(t.get_nome() == nome_territorio){
                                 t += quantidade;
+                                return;
                         }
                 }
                 throw std::runtime_error("Jogador::posicionar_tropa(const std::string& nome_territorio, unsigned int quantidade) Território não encontrado");

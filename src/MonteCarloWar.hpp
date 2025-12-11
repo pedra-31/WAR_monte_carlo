@@ -1,5 +1,5 @@
-#ifndef MONTECARLO_HPP
-#define MONTECARLO_HPP
+#ifndef MONTECARLOWAR_HPP
+#define MONTECARLOWAR_HPP
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,6 +9,7 @@
 
 class Territorio;
 class Divisa;
+
 
 /**
  * @class MonteCarloWar
@@ -32,7 +33,9 @@ class MonteCarloWar{
         * @brief Construtor de MonteCarloWar
         * @param war_original uma cópia que é entregue a classe, deve ser atualizada posteriormente depois que o lance for atualizada
         */
-        MonteCarloWar(const War& war_original);
+        MonteCarloWar(War& original);
+
+        War* get_war();
 
         /**
         * @brief simula uma rodada de todos jogadores de war
@@ -43,6 +46,8 @@ class MonteCarloWar{
         * @brief Escolhe aleatoriamente as posições para posicionar tropas 
         */
         void posicionar_tropas(char player);
+
+        ~MonteCarloWar();
 };
 
 
