@@ -28,7 +28,8 @@ int main() {
             std::cout << "\najuda/help - Mostra todos os comandos disponiveis\n\n" 
                 << "clear/cls/limpar - Limpa a tela do console\n\n"
                 << "info - Mostra informações do jogo\n\n"
-                << "info_territorios - Mostra informações do territorio\n\n"
+                << "info_territorios - Mostra informações dos territorios\n\n"
+                << "territorio [territorio] - Mostra informação sobre um territorio especifico\n\n" 
                 << "adicionar_tropas [territorio] [tropas] - \nAdiciona tropas em um certo territorio de nome [territorio] com [tropas] como quantidade de tropas\n\n"
                 << "trocar_territorio [player] [territorio] - \nEntrega um territorio de nome [territorio] para o player de nome [player]\n\n";
 
@@ -40,8 +41,18 @@ int main() {
         } else if(comando == "info"){
             main_war.info();
             
-        } else if(comando == "info_territorios"){
+        } else if(comando == "info_territorios" || comando == "info_territórios"){
             main_war.info_territorios();
+
+        } else if(comando == "territorio" || comando == "território"){
+            std::string nome_territorio; iss >> nome_territorio;
+            Territorio* t = main_war.get_territorio(nome_territorio);
+
+            if(t != nullptr){
+                main_war.get_territorio(nome_territorio)->info();
+            } else {
+                std::cout << "Territorio nao encontrado\n";
+            }
 
         } else if(comando == "adicionar_tropas"){
             std::string nome_territorio; uint16_t quant_tropas;
@@ -61,6 +72,9 @@ int main() {
             mc_war.get_war()->info_territorios();
             mc_war.posicionar_tropas('a');
             mc_war.get_war()->info_territorios();
+            for(auto& d : mc_war.get_war()->get_divisas_intessantes('a')){
+                d.info();
+            }
             
         } else {
             std::cout << "comando invalido" << std::endl;

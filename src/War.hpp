@@ -77,6 +77,13 @@ class War {
         std::vector<uint16_t> get_id_territorios_adjacentes_com_inimigos(char jogador);
 
         /**
+         * @brief Retorna a lista de Divisas que podem ser interessantes para um ataque
+         * @param jogador nome do jogador para encontrar essas divisas
+         * @return Retorna a lista de divisas
+         */
+        std::vector<Divisa> get_divisas_intessantes(char jogador);
+
+        /**
          * @brief Faz a troca de territórios (usado só para players reais), a quantidade de tropas cai para 1
          * @param nome_atacante nome do jogador atacando o territorio
          * @param nome_territorio_atacado nome do território onde ocorreu a batalha

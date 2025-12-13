@@ -47,6 +47,11 @@ class MonteCarloWar{
         */
         void posicionar_tropas(char player);
 
+        /**
+        * @brief Escolhe um ataque 
+        */
+        void atacar(char player);
+
         ~MonteCarloWar();
 };
 

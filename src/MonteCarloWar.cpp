@@ -28,5 +28,19 @@
             _war.get_jogador(player)->posicionar_tropa(v_adj[dist(_gen)], 1);
         }
     }
+    
+    void simular_ataque(char player){
+
+    }
+
+    void MonteCarloWar::atacar(char player){
+        auto v_adj = _war.get_id_territorios_adjacentes_com_inimigos(player);
+
+        // std::uniform_int_distribution<uint16_t> dist(0, (uint16_t)v_adj.size() - 1);
+        // //Quantidade aleatoria de ataques que a maquina vai fazer
+        // uint16_t n_ataques = dist(_gen);
+
+        
+    }
 
     MonteCarloWar::~MonteCarloWar() = default;

@@ -44,6 +44,8 @@ class Divisa {
          * @brief Imprime as informações da classe no cout
          */
         void info();
+
+        bool operator==(const Divisa& other) const;
 };
 
 

@@ -30,3 +30,8 @@
         void Divisa::info(){
             std::cout << "(" << _v1 << "---" << _v2 << ")\n";
         }
+
+
+    bool Divisa::operator==(const Divisa& other) const {
+        return _v1 == other.get_v1() && _v2 == other.get_v2();
+    }

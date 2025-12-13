@@ -163,6 +163,35 @@
             }
         }
 
+        std::vector<Divisa> War::get_divisas_intessantes(char jogador){
+            //achando a lista de "territorios interessantes"
+
+            Jogador* j = this->get_jogador(jogador);
+            auto territorios_jogador = j->get_territorios();
+            std::vector<Territorio> territorios_interessantes;
+            for(auto& t : territorios_jogador){
+                if(t.get_num_tropas() > 1){
+                    territorios_interessantes.push_back(t);
+                }
+            }
+
+            std::vector<Divisa> divisas_interessantes;
+            for(auto& d : _divisas){
+                for(auto& t : territorios_interessantes){
+                    if(
+                        !(std::find(divisas_interessantes.begin(), divisas_interessantes.end(), d) != divisas_interessantes.end()) &&
+                        (d.get_v1() == t.get_id() || d.get_v2() == t.get_id()) && 
+                        ((this->get_territorio(d.get_v1())->get_player() == jogador && this->get_territorio(d.get_v2())->get_player() != jogador) || 
+                        (this->get_territorio(d.get_v1())->get_player() != jogador && this->get_territorio(d.get_v2())->get_player() == jogador))
+                    ){
+                        divisas_interessantes.push_back(d);
+                    }
+                }
+            }
+
+            return divisas_interessantes;
+        }   
+
         unsigned int War::get_num_jogadores(){
             return _num_jogadores;
         }
