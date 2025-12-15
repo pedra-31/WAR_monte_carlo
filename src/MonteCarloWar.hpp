@@ -52,6 +52,11 @@ class MonteCarloWar{
         */
         void atacar(char player);
 
+        /**
+        * @brief Simula um ataque (à favor do jogador [player]) em uma divisa aleatória dado a lista de divisas
+        */
+        void simular_ataque(std::vector<Divisa> divisas, char player);
+
         ~MonteCarloWar();
 };
 

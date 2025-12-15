@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <fstream>
 #include <algorithm>
+#include <random>
 
 class Territorio;
 class Divisa;
@@ -89,6 +90,13 @@ class War {
          * @param nome_territorio_atacado nome do território onde ocorreu a batalha
          */
         void recebe_territorio(char nome_atacante, const std::string& nome_territorio_atacado);
+
+        /**
+         * @brief Faz a troca de territórios (usado só para players reais), a quantidade de tropas cai para 1
+         * @param nome_atacante nome do jogador atacando o territorio
+         * @param territorio_atacado território (objeto) onde ocorreu a batalha
+         */
+        void recebe_territorio(char nome_atacante, Territorio* territorio_atacado);
 
         /**
          * @brief info do jogo no cout, chama todos os infos de classes componentes

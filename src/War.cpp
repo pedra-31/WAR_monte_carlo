@@ -83,8 +83,6 @@
             _continentes = std::move(continentes);
         }
 
-
-
         Territorio* War::get_territorio(uint16_t id_territorio){
             for(auto& j : _jogadores){
                 try{
@@ -237,6 +235,34 @@
             
         }
 
+        void War::recebe_territorio(char nome_atacante, Territorio* territorio_atacado){
+            Jogador* j_defensor = nullptr;
+            Jogador* j_atacante = nullptr;
+
+            for(auto& j : _jogadores){
+                if(j.get_nome() == nome_atacante){
+                    j_atacante = &j;
+                }
+            }
+            if(j_atacante == nullptr){
+                throw std::runtime_error("void War::recebe_territorio(char nome_atacante, ...): Não existe jogador com nome_atacante: " + nome_atacante);
+            }
+
+            for (auto& j : _jogadores){
+                        j_defensor = &j;
+                        if(j.get_nome() == j_atacante->get_nome()){
+                            throw std::runtime_error("void War::recebe_territorio(): nome_defensor == nome_atacante");
+                        }
+                        Territorio territorio = j.remover_territorio(territorio_atacado->get_id());
+                        //seta as tropas para 1
+                        territorio.set_tropas(1);
+                        territorio.set_player(j_atacante->get_nome());
+                        //adiciona o territorio em j_atacante
+                        j_atacante->adicionar_territorio(territorio);
+                        return; 
+
+            }
+        }
 
 
         void War::info(){

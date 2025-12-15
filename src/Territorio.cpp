@@ -46,10 +46,6 @@
         }
 
         Territorio& Territorio::operator-=(uint16_t x) {
-            if (_num_tropas - x < 1){
-                throw std::runtime_error("Territorio::operator-=(uint16_t x): ao final da operação DEVE conter pelo menor 1 tropa posicionada em cada vértice");
-            }
-            
             _num_tropas -= x;
             return *this;
         }
