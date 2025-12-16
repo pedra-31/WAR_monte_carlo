@@ -38,11 +38,6 @@ class MonteCarloWar{
         War* get_war();
 
         /**
-        * @brief simula uma rodada de todos jogadores de war
-        */
-        void simular_rodada();
-
-        /**
         * @brief Escolhe aleatoriamente as posições para posicionar tropas 
         */
         void posicionar_tropas(char player);
@@ -53,9 +48,9 @@ class MonteCarloWar{
         void atacar(char player);
 
         /**
-        * @brief Simula um ataque (à favor do jogador [player]) em uma divisa aleatória dado a lista de divisas
+        * @brief Faz reposicionamentos
         */
-        void simular_ataque(std::vector<Divisa> divisas, char player);
+        void reposicionar(char player);
 
         ~MonteCarloWar();
 };

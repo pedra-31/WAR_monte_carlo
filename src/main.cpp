@@ -69,11 +69,13 @@ int main() {
             }
         } else if(comando == "TESTE"){
             MonteCarloWar mc_war(main_war);
-            mc_war.posicionar_tropas('a');
-            mc_war.posicionar_tropas('a');
-            mc_war.atacar('a');
-            mc_war.atacar('a');
-            mc_war.atacar('a');
+            mc_war.posicionar_tropas('b');
+            mc_war.posicionar_tropas('b');
+            mc_war.get_war()->info_territorios();
+            mc_war.reposicionar('b');
+            mc_war.reposicionar('b');
+            mc_war.reposicionar('b');
+            mc_war.get_war()->info_territorios();
             
         } else {
             std::cout << "comando invalido" << std::endl;
