@@ -35,22 +35,11 @@ class MonteCarloWar{
         */
         MonteCarloWar(War& original);
 
+        /**
+        * @brief retorna o War de MCWar
+        * @return ponteiro para o objeto War de MCWar
+        */
         War* get_war();
-
-        /**
-        * @brief Escolhe aleatoriamente as posições para posicionar tropas 
-        */
-        void posicionar_tropas(char player);
-
-        /**
-        * @brief Escolhe um ataque 
-        */
-        void atacar(char player);
-
-        /**
-        * @brief Faz reposicionamentos
-        */
-        void reposicionar(char player);
 
         ~MonteCarloWar();
 };

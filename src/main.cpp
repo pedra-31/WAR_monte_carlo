@@ -69,12 +69,12 @@ int main() {
             }
         } else if(comando == "TESTE"){
             MonteCarloWar mc_war(main_war);
-            mc_war.posicionar_tropas('b');
-            mc_war.posicionar_tropas('b');
+            mc_war.get_war()->restart_gen();
+            mc_war.get_war()->simular_posicionar_tropas('b');
             mc_war.get_war()->info_territorios();
-            mc_war.reposicionar('b');
-            mc_war.reposicionar('b');
-            mc_war.reposicionar('b');
+            mc_war.get_war()->simular_atacar('b');
+            mc_war.get_war()->info_territorios();
+            mc_war.get_war()->simular_reposicionar('b');
             mc_war.get_war()->info_territorios();
             
         } else {

@@ -21,7 +21,13 @@ class Jogador;
  */
 class War {
     private:
-        
+
+        /**
+         * @brief gerador de números aleatórios
+         */
+        std::mt19937 _gen;    
+
+
         /**
          * @brief quantidade de jogadores ativos
          */
@@ -92,13 +98,6 @@ class War {
         void recebe_territorio(char nome_atacante, const std::string& nome_territorio_atacado);
 
         /**
-         * @brief Faz a troca de territórios (usado só para players reais), a quantidade de tropas cai para 1
-         * @param nome_atacante nome do jogador atacando o territorio
-         * @param territorio_atacado território (objeto) onde ocorreu a batalha
-         */
-        void recebe_territorio(char nome_atacante, Territorio* territorio_atacado);
-
-        /**
          * @brief info do jogo no cout, chama todos os infos de classes componentes
          */
         void info();
@@ -107,6 +106,30 @@ class War {
          */
         void info_territorios();
 
+        /**
+        * @brief Reseta o gerador de numeros aleatorios
+        * @param seed seed para colocar como geradora de numeros aleatorios
+        */
+        void restart_gen(uint32_t seed);
+
+        /**
+        * @brief Reseta o gerador de numeros aleatorios
+        */
+        void restart_gen();
+        /**
+        * @brief Escolhe aleatoriamente as posições para posicionar tropas 
+        */
+        void simular_posicionar_tropas(char player);
+
+        /**
+        * @brief Escolhe um ataque 
+        */
+        void simular_atacar(char player);
+
+        /**
+        * @brief Faz reposicionamentos
+        */
+        void simular_reposicionar(char player);
 
 
         ~War();   
