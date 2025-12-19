@@ -61,6 +61,7 @@ class War {
 
         //getters
         Jogador* get_jogador(char nome);
+        const std::vector<Jogador>& get_jogadores() const;
         unsigned int get_num_jogadores();
         const std::vector<uint16_t>& get_divisas() const;
 
@@ -115,7 +116,14 @@ class War {
         /**
         * @brief Reseta o gerador de numeros aleatorios
         */
+
         void restart_gen();
+
+        /**
+        * @brief calcula a quantidade de pontos vitoria
+        */
+        unsigned int calcular_pontos_vitoria(char nome);
+        
         /**
         * @brief Escolhe aleatoriamente as posições para posicionar tropas 
         */
@@ -131,6 +139,7 @@ class War {
         */
         void simular_reposicionar(char player);
 
+        void checa_jogadores();
 
         ~War();   
 

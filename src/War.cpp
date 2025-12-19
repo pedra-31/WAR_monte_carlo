@@ -119,6 +119,10 @@
             throw std::runtime_error("War::get_jogador(char jogador): Não existe jogador com esse nome");
         }
 
+        const std::vector<Jogador>& War::get_jogadores() const{
+            return _jogadores;
+        }
+
         std::vector<uint16_t> War::get_id_territorios_adjacentes(uint16_t id_territorio){
             std::vector<uint16_t> lista;
 
@@ -155,6 +159,9 @@
                     }
                 }
             }
+
+            return lista;
+
             if(!lista.empty()){
                 return lista;
             } else {
@@ -195,6 +202,15 @@
             return _num_jogadores;
         }
 
+        void War::checa_jogadores() {
+            for (auto it = _jogadores.begin(); it != _jogadores.end(); ) {
+                if (it->get_territorios().empty()) {
+                    it = _jogadores.erase(it); // erase devolve o próximo iterador
+                } else {
+                    ++it;
+                }
+            }
+        }
 
 
         void War::recebe_territorio(char nome_atacante, const std::string& nome_territorio_defensor){
@@ -271,8 +287,19 @@
             _gen.seed(seed);
         }
 
+    unsigned int War::calcular_pontos_vitoria(char nome){
+        return this->get_jogador(nome)->get_tropas()*(unsigned int)4;
+    }
+
     void War::simular_posicionar_tropas(char player){
         uint16_t num_tropas = this->get_jogador(player)->get_tropas();
+        //somando quantidade de tropas providas pelos continentes
+        for(auto& c : _continentes){
+            //AHHHHHHHHHHHHHHHHHHH essa função deveria ser para jogador e não contrário, mas WHAREVER, vai ficar assim
+            if(c.possui_continente(this->get_jogador(player))){
+                num_tropas += c.get_pontos_conquista();
+            }
+        }
         auto v_adj = this->get_id_territorios_adjacentes_com_inimigos(player);
 
         
@@ -469,11 +496,8 @@
 
             *t_adj += 1;
             *t -= 1;
-
-            std::cout << "---------------------------------\n";
-            t->info(); t_adj->info();
-            std::cout << "---------------------------------\n";
         }
     }
+
 
         War::~War() = default;  

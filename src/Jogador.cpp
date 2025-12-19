@@ -140,7 +140,7 @@
            t.info();
         }
     }
-
+        //CONNNNNNNNNNNNNNNNNNNNNNNNNSsssssssssssssssssssssssEEEEEEEEEEEEEEERRRRRRRRRRRRTAR ISSO
         uint16_t Jogador::get_tropas(){
                 return uint16_t(_territorios.size()/2) + trocar_cartas();
         }

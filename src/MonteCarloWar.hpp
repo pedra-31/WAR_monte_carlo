@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstdint>
 #include <random>
+#include <thread>
 #include "War.hpp"
 
 class Territorio;
@@ -22,11 +23,6 @@ class MonteCarloWar{
         */
         War _war;
 
-        /**
-         * @brief gerador de números aleatórios
-         */
-        std::mt19937 _gen;
-
     public:
 
         /**
@@ -34,6 +30,23 @@ class MonteCarloWar{
         * @param war_original uma cópia que é entregue a classe, deve ser atualizada posteriormente depois que o lance for atualizada
         */
         MonteCarloWar(War& original);
+
+        /**
+        * @brief Simula varias rodadas completas de War começando com o player 'a'
+        */
+       void simula_rodadas();
+
+        /**
+        * @brief 
+        * @param player 
+        */
+       void encontrar_posicionamento(char player);
+
+        /**
+        * @brief 
+        * @param player 
+        */
+       void encontrar_ataque(char player);
 
         /**
         * @brief retorna o War de MCWar

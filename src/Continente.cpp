@@ -19,8 +19,8 @@
             return _nome;
         }
 
-        bool Continente::possui_continente(Jogador j) const{
-            const std::vector<uint16_t>& v =  j.get_id_territorios();
+        bool Continente::possui_continente(Jogador* j) const{
+            const std::vector<uint16_t>& v =  j->get_id_territorios();
             // Conta quantos vértices do continente aparecem no vetor v
             unsigned int count = 0;
 

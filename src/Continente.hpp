@@ -43,7 +43,7 @@ class Continente {
          * @brief função que checa se um jogador possuí todos os territórios de um continente
          * @return True se possui, False se não possui
          */
-        bool possui_continente(Jogador j) const;
+        bool possui_continente(Jogador* j) const;
 
         /**
          * @brief Imprime as informações da classe no cout
