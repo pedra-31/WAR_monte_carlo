@@ -11,17 +11,6 @@
         : _war(original){
         }
 
-
-        
-    void MonteCarloWar::simula_rodadas(){
-        for(auto& j : _war.get_jogadores()){
-            char nome = j.get_nome();
-            _war.simular_posicionar_tropas(nome);
-            _war.simular_atacar(nome);
-            _war.simular_reposicionar(nome);
-        }
-    }
-
     void MonteCarloWar::encontrar_posicionamento(char player){
         
         struct data_pos {
@@ -31,7 +20,6 @@
             data_pos()
                 : war(0), pontos_vitoria(0) {
             }
-
             data_pos(const War& war)
                 : war(war), pontos_vitoria(0) {
             }
@@ -42,8 +30,7 @@
 
         for (int i = 0; i < Tamanho_threads; i++) {
             threads.emplace_back([i, player, war = _war, &resultados]() mutable{
-                war.info();
-                
+
                 //Reseta o gerador de numeros aleatorios
                 war.restart_gen();
 
@@ -54,33 +41,41 @@
                 data_pos data(war);
 
                 //acaba a rodada desse player
-                war.simular_atacar(player);
+                war.simular_multi_ataques(player);
                 war.simular_reposicionar(player);
 
                 //acaba as rodadas de outros players
-                auto v = war.get_jogadores();
-                for(auto& j : v){
-                    if(j.get_nome() > player){
-                        char nome = j.get_nome();
-                        war.simular_posicionar_tropas(nome);
-                        war.simular_atacar(nome);
+                auto v = war.get_ordem_jogadores();
+                for(auto& nome_j : v){
+                    if(nome_j > player){
+                        war.simular_posicionar_tropas(nome_j);
+                        war.simular_multi_ataques(nome_j);
                         war.checa_jogadores();
-                        war.simular_reposicionar(nome);
+                        war.simular_reposicionar(nome_j);
                     }
                 }
 
                 //faz o loop de simulações 
                 for(int i = 0; i < Profundiadade; i++){
-                    for(auto& j : war.get_jogadores()){
-                        char nome = j.get_nome();
-                        war.simular_posicionar_tropas(nome);
-                        war.simular_atacar(nome);
+                    for(auto& nome_j : war.get_ordem_jogadores()){
+                        war.simular_posicionar_tropas(nome_j);
+                        try{
+                            war.simular_multi_ataques(nome_j);
+                        } catch(std::runtime_error& e){
+                            std::cout << e.what() << std::endl;
+                        }
                         war.checa_jogadores();
-                        war.simular_reposicionar(nome);
+                        war.simular_reposicionar(nome_j);
                     }
-                    data.pontos_vitoria += war.calcular_pontos_vitoria(player);
+                    //se ainda existe o jogador player então soma pontos_vitoria
+                    for(auto& j : war.get_ordem_jogadores()){
+                        if(j == player){
+                            data.pontos_vitoria += war.calcular_pontos_vitoria(player);
+                            break;
+                        }
+                    }
                 }
-
+                war.info_territorios();
                 resultados[i] = data;
             });
         }
@@ -98,7 +93,7 @@
             }
         }
         
-        maior_data.war.info();
+        maior_data.war.info_territorios();
     }
 
     War* MonteCarloWar::get_war(){

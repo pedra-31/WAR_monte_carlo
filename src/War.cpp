@@ -5,14 +5,13 @@
 #include "Continente.hpp"
 
         War::War(int num_jogadores) :
-        _gen(std::random_device{}()),
-        _num_jogadores(num_jogadores){
-            ler_territorios("../data/territorios.txt");
+        _gen(std::random_device{}()){
+            ler_territorios("../data/territorios.txt", num_jogadores);
             ler_divisas("../data/divisas.txt");
             ler_continentes("../data/continentes.txt");   
         }
 
-        void War::ler_territorios(const std::string& caminho){
+        void War::ler_territorios(const std::string& caminho, unsigned int num_jogadores){
             std::ifstream arq(caminho); 
             if (!arq) {
                 throw std::runtime_error("Arquivo nao pode ser aberto: " + caminho + "\n");
@@ -21,7 +20,7 @@
             std::string nome;
             uint16_t id;
             char player;
-            for(unsigned int i = 0; i < _num_jogadores; i++){
+            for(unsigned int i = 0; i < num_jogadores; i++){
                 _jogadores.emplace_back(i+97);
             }
 
@@ -97,6 +96,16 @@
             return nullptr;
         }
 
+        std::vector<char> War::get_ordem_jogadores() const{
+            std::vector<char> lista;
+
+            for(auto& j : _jogadores){
+                lista.push_back(j.get_nome());
+            }
+
+            return lista;
+        }
+
         Territorio* War::get_territorio(const std::string& nome){
             for(auto& j : _jogadores){
                 try{
@@ -110,17 +119,13 @@
             return nullptr;
         }
 
-        Jogador* War::get_jogador(char jogador){
+        Jogador* War::get_jogador(char jogador){ 
             for(auto& j : _jogadores){
                 if(j.get_nome() == jogador){
                     return &j;
                 }
             }
-            throw std::runtime_error("War::get_jogador(char jogador): Não existe jogador com esse nome");
-        }
-
-        const std::vector<Jogador>& War::get_jogadores() const{
-            return _jogadores;
+            throw std::runtime_error("War::get_jogador(char jogador): Não existe jogador com esse nome: " + jogador);
         }
 
         std::vector<uint16_t> War::get_id_territorios_adjacentes(uint16_t id_territorio){
@@ -139,7 +144,8 @@
             if(!lista.empty()){
                 return lista;
             } else {
-                throw std::runtime_error("War::get_id_territorios_adjacentes(uint16_t id_territorio): id_territorio nao e um territorio valido");
+                std::cout << id_territorio << std::endl;
+                return lista;
             }
         }
 
@@ -149,7 +155,11 @@
             Jogador* j = this->get_jogador(jogador);
             auto t_jogador = j->get_id_territorios();
 
-            for(auto& t : j->get_id_territorios()){ //t representa um id_territorio em _territorios de player
+            if(t_jogador.empty()){
+                return lista;
+            }
+
+            for(auto& t : t_jogador){ //t representa um id_territorio em _territorios de player
                 for(auto& t_adj : this->get_id_territorios_adjacentes(t)){ //t_adj é o id_territorio adjacente de um t
                     if(
                         !(std::find(t_jogador.begin(), t_jogador.end(), t_adj) != t_jogador.end()) && //Se t_adj não é de player e 
@@ -161,23 +171,18 @@
             }
 
             return lista;
-
-            if(!lista.empty()){
-                return lista;
-            } else {
-                throw std::runtime_error("War::get_id_territorios_adjacentes_com_inimigos(char jogador): Algum erro estranho");
-            }
         }
 
         std::vector<Divisa> War::get_divisas_intessantes(char jogador){
             //achando a lista de "territorios interessantes"
 
             Jogador* j = this->get_jogador(jogador);
-            auto territorios_jogador = j->get_territorios();
-            std::vector<Territorio> territorios_interessantes;
-            for(auto& t : territorios_jogador){
-                if(t.get_num_tropas() > 1){
-                    territorios_interessantes.push_back(t);
+            auto territorios_jogador = j->get_id_territorios();
+            std::vector<Territorio*> territorios_interessantes;
+
+            for(auto& id_t : territorios_jogador){
+                if(j->get_territorio(id_t)->get_num_tropas() > 1){
+                    territorios_interessantes.push_back(j->get_territorio(id_t));
                 }
             }
 
@@ -186,7 +191,7 @@
                 for(auto& t : territorios_interessantes){
                     if(
                         !(std::find(divisas_interessantes.begin(), divisas_interessantes.end(), d) != divisas_interessantes.end()) &&
-                        (d.get_v1() == t.get_id() || d.get_v2() == t.get_id()) && 
+                        (d.get_v1() == t->get_id() || d.get_v2() == t->get_id()) && 
                         ((this->get_territorio(d.get_v1())->get_player() == jogador && this->get_territorio(d.get_v2())->get_player() != jogador) || 
                         (this->get_territorio(d.get_v1())->get_player() != jogador && this->get_territorio(d.get_v2())->get_player() == jogador))
                     ){
@@ -199,12 +204,12 @@
         }   
 
         unsigned int War::get_num_jogadores(){
-            return _num_jogadores;
+            return _jogadores.size();
         }
 
         void War::checa_jogadores() {
             for (auto it = _jogadores.begin(); it != _jogadores.end(); ) {
-                if (it->get_territorios().empty()) {
+                if (it->get_id_territorios().empty()) {
                     it = _jogadores.erase(it); // erase devolve o próximo iterador
                 } else {
                     ++it;
@@ -214,17 +219,8 @@
 
 
         void War::recebe_territorio(char nome_atacante, const std::string& nome_territorio_defensor){
-            Jogador* j_defensor = nullptr;
+            Jogador* j_defensor = this->get_jogador(nome_atacante);
             Jogador* j_atacante = nullptr;
-
-            for(auto& j : _jogadores){
-                if(j.get_nome() == nome_atacante){
-                    j_atacante = &j;
-                }
-            }
-            if(j_atacante == nullptr){
-                throw std::runtime_error("void War::recebe_territorio(char nome_atacante, ...): Não existe jogador com nome_atacante: " + nome_atacante);
-            }
 
             for (auto& j : _jogadores){
                 for(auto& t : j.get_nome_territorios()){
@@ -254,7 +250,7 @@
 
 
         void War::info(){
-            std::cout << "players restantes:" << _num_jogadores << "\n\n";
+            std::cout << "players restantes:" << _jogadores.size() << "\n\n";
             std::cout << "Info jogadores:" << "\n";
             for(auto& j : _jogadores){
                 j.info();
@@ -288,7 +284,7 @@
         }
 
     unsigned int War::calcular_pontos_vitoria(char nome){
-        return this->get_jogador(nome)->get_tropas()*(unsigned int)4;
+        return this->get_jogador(nome)->get_nome_territorios().size() + this->get_jogador(nome)->num_get_tropas();
     }
 
     void War::simular_posicionar_tropas(char player){
@@ -300,8 +296,12 @@
                 num_tropas += c.get_pontos_conquista();
             }
         }
+        
         auto v_adj = this->get_id_territorios_adjacentes_com_inimigos(player);
 
+        if(v_adj.empty()){
+            return;
+        }
         
         std::uniform_int_distribution<size_t> dist(0, v_adj.size() - 1);
 
@@ -311,8 +311,17 @@
     }
 
     void War::simular_atacar(char player){
+        //se só existe 1 player para a operação
+        if(get_num_jogadores() == 1){
+            return;
+        }
+
         //acho divisas_interessantes
-        auto divisas_interessantes = this->get_divisas_intessantes(player); 
+        auto divisas_interessantes = this->get_divisas_intessantes(player);
+        
+        if(divisas_interessantes.empty()){
+            return;
+        }
 
         //Sorteio uma divisa qualquer
         std::uniform_int_distribution<uint16_t> dist2(0, (uint16_t)divisas_interessantes.size() - 1);
@@ -463,15 +472,31 @@
         }
     }
 
+    void War::simular_multi_ataques(char player){
+        //gera uma quantidade aleatoria de ataques para fazer
+        std::uniform_int_distribution<uint16_t> dist5(0, ((uint16_t)this->get_jogador(player)->num_get_tropas()/2) - 1);
+        for(int i = 0; i < dist5(_gen); i++){
+            this->simular_atacar(player);
+        }
+    }
+
     void War::simular_reposicionar(char player){
         Jogador * j = this->get_jogador(player);
-        auto territorios_jogador = j->get_territorios();
+        auto territorios_jogador = j->get_id_territorios();
 
+        if (territorios_jogador.empty()){
+            return;
+        }
+        
         std::vector<Territorio*> territorios_interessantes;
-        for(auto& t : territorios_jogador){
-            if(t.get_num_tropas() > 1){
-                territorios_interessantes.push_back(&t);
+        for(auto& id_t : territorios_jogador){
+            if(j->get_territorio(id_t)->get_num_tropas() > 1){
+                territorios_interessantes.push_back(j->get_territorio(id_t));
             }
+        }
+        
+        if (territorios_interessantes.empty()){
+            return;
         }
 
         std::uniform_int_distribution<uint16_t> dist3(0, territorios_interessantes.size() - 1);

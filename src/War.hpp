@@ -27,12 +27,6 @@ class War {
          */
         std::mt19937 _gen;    
 
-
-        /**
-         * @brief quantidade de jogadores ativos
-         */
-        unsigned int _num_jogadores;
-
         /**
          * @brief um mapa que contém os continentes e dentro de cada continente, seus id_territórios
          */
@@ -55,14 +49,14 @@ class War {
         War(int num_jogadores);
 
         //helpers de contrutor. Leêm informações do arquivo caminho
-        void ler_territorios(const std::string& caminho);
+        void ler_territorios(const std::string& caminho, unsigned int num_jogadores);
         void ler_divisas(const std::string& caminho);
         void ler_continentes(const std::string& caminho);
 
         //getters
         Jogador* get_jogador(char nome);
-        const std::vector<Jogador>& get_jogadores() const;
         unsigned int get_num_jogadores();
+        std::vector<char> get_ordem_jogadores() const;
         const std::vector<uint16_t>& get_divisas() const;
 
 
@@ -133,6 +127,11 @@ class War {
         * @brief Escolhe um ataque 
         */
         void simular_atacar(char player);
+
+        /**
+        * @brief Escolhe um ataque 
+        */
+        void simular_multi_ataques(char player);
 
         /**
         * @brief Faz reposicionamentos

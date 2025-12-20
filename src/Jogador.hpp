@@ -46,13 +46,7 @@ class Jogador {
 
         //getters
         char get_nome() const;
-        
-        /**
-         * @brief devolva a lista de territorios que o jogador possui
-         * @return retorna um vector com o objeto de territorios
-         */
-        const std::vector<Territorio>& get_territorios() const;
-
+    
         /**
          * @brief devolva a lista de id_territorios que o jogador possui
          * @return retorna um vector com os ids
@@ -119,6 +113,12 @@ class Jogador {
          * @return quantidade de tropas
          */
         uint16_t get_tropas();
+
+        /**
+         * @brief acha a quantidade de tropas estacionadas que um jogador tem em todos seus territorios
+         * @return quantidade de tropas estacionadas
+         */
+        unsigned int num_get_tropas();
 
         /**
          * @brief posiciona tropas do jogador no território 

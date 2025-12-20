@@ -145,8 +145,12 @@
                 return uint16_t(_territorios.size()/2) + trocar_cartas();
         }
 
-        const std::vector<Territorio>& Jogador::get_territorios() const{
-                return _territorios;
+        unsigned int Jogador::num_get_tropas(){
+                unsigned int num_tropas = 0;
+                for(auto& t : _territorios){
+                        num_tropas += t.get_num_tropas();
+                }
+                return num_tropas;
         }
 
         void Jogador::posicionar_tropa(uint16_t id_territorio, unsigned int quantidade){
