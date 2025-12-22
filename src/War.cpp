@@ -286,7 +286,7 @@
         }
 
     unsigned int War::calcular_pontos_vitoria(char nome){
-        return this->get_jogador(nome)->get_nome_territorios().size() + this->get_jogador(nome)->num_get_tropas();
+        return this->get_jogador(nome)->get_nome_territorios().size()*2 + this->get_jogador(nome)->num_get_tropas();
     }
 
     void War::simular_posicionar_tropas(char player){
@@ -319,7 +319,7 @@
         }
     }
 
-    Divisa War::simular_atacar(char player){
+    Divisa War::simular_atacar_divisa(char player){
         //se só existe 1 player para a operação
         if(get_num_jogadores() == 1){
             return Divisa(0, 0);
@@ -499,6 +499,187 @@
             }
         }
         return d_ataque;
+    }
+
+    void War::simular_atacar(char player){
+        //se só existe 1 player para a operação
+        if(get_num_jogadores() == 1){
+            return;
+        }
+
+        //acho divisas_interessantes
+        auto divisas_interessantes = this->get_divisas_intessantes(player);
+        
+        if(divisas_interessantes.empty()){
+            return;
+        }
+
+        //Sorteio uma divisa qualquer
+        std::uniform_int_distribution<uint16_t> dist2(0, (uint16_t)divisas_interessantes.size() - 1);
+        Divisa d_ataque = divisas_interessantes[dist2(_gen)];
+        
+        
+        Territorio* t_ataque = this->get_territorio(d_ataque.get_v1());
+        Territorio* t_defesa = nullptr;
+        
+        //Se t_ataque é de player então v2 é o t_defesa
+        if(t_ataque->get_player() == player){
+            t_defesa = this->get_territorio(d_ataque.get_v2());
+        } else {
+            //Se não, é só inverter, e v2 é o t_ataque
+            t_defesa = t_ataque;
+            t_ataque = this->get_territorio(d_ataque.get_v2());
+        }
+
+        //Se existe desvantagem forte recua o ataque
+        if(t_ataque->get_num_tropas() + 3 < t_defesa->get_num_tropas()){
+            return;
+        }
+        
+        std::uniform_real_distribution<double> uniform{0.0, 1.0};
+        double x = uniform(_gen);
+
+        uint16_t A; uint16_t D;
+
+        if(t_ataque->get_num_tropas() <= 3){
+            A = t_ataque->get_num_tropas() - 1;
+        } else {
+            A = 3;
+        }
+
+        if(t_defesa->get_num_tropas() <= 3){
+            D = t_defesa->get_num_tropas();
+        } else {
+            D = 3;
+        }
+
+        // Fanfic: A3 vs D3
+        if (A == 3 && D == 3) {
+            if (x < 0.3497){ //resultado = ResultadoRodada::A_perde_3;
+                *t_ataque -= 3;
+
+            } else if (x < 0.3497 + 0.2953){ //resultado = ResultadoRodada::A_perde_2_D_perde_1;
+                *t_ataque -= 2;  *t_defesa -= 1; 
+
+            } else if (x < 0.3497 + 0.2953 + 0.2248){ //resultado = ResultadoRodada::A_perde_1_D_perde_2;
+                *t_ataque -= 1;  *t_defesa -= 2; 
+
+            } else { //resultado = ResultadoRodada::D_perde_3;
+                *t_defesa -= 3; 
+            } 
+        }
+
+        // A2 vs D3
+        else if (A == 2 && D == 3) {
+            if (x < 0.4483) {                 // A perde 2
+                *t_ataque -= 2;
+
+            } else if (x < 0.4483 + 0.3241) { // A perde 1 / D perde 1
+                *t_ataque -= 1;
+                *t_defesa -= 1;
+
+            } else {                          // D perde 2
+                *t_defesa -= 2;
+            }
+        }
+
+        // A1 vs D3
+        else if (A == 1 && D == 3) {
+            if (x < 0.8264) { // atacante perde 1
+                *t_ataque -= 1;
+            } else {          // defensor perde 1
+                *t_defesa -= 1;
+            }
+        }
+
+        // Restante dos casos (War clássico)
+        // A3 vs D2
+        else if (A == 3 && D == 2) {
+            if (x < 0.2929) {//resultado = ResultadoRodada::A_perde_2;
+                *t_ataque -= 2;
+            
+            } else if (x < 0.2929 + 0.3358) {//resultado = ResultadoRodada::A_perde_1_D_perde_1;
+                *t_ataque -= 1; *t_defesa -= 1;
+            
+            } else {//resultado = ResultadoRodada::D_perde_2;
+                *t_defesa -= 2;
+            
+            }
+        }
+
+        // A2 vs D2
+        else if (A == 2 && D == 2) {
+            if (x < 0.2276) { //resultado = ResultadoRodada::A_perde_2;
+                *t_ataque -= 2;
+
+            } else if (x < 0.2276 + 0.3240) { //resultado = ResultadoRodada::A_perde_1_D_perde_1;
+                *t_ataque -= 1; *t_defesa -= 1;
+
+            } else { //resultado = ResultadoRodada::D_perde_2;
+                *t_defesa -= 2;
+            
+            }
+        }
+
+        // A3/A2 vs D1
+        else if ((A == 3 || A == 2) && D == 1) {
+            if (x < 0.3403) {  // atacante perde 1
+                *t_ataque -= 1;
+
+            } else {           // defensor perde 1
+                *t_defesa -= 1;
+
+            }
+        }
+
+        // A1 vs D1
+        else  if (A == 1 && D == 1) {
+            if (x < 0.4167) {//resultado = ResultadoRodada::A_perde_1;
+                *t_ataque -= 1;
+
+            } else { //resultado = ResultadoRodada::D_perde_1
+                *t_defesa -= 1;
+            }
+        }
+
+        if(t_defesa->get_num_tropas() == 0){
+            uint16_t id_defesa = t_defesa->get_id();
+            uint16_t id_ataque = t_ataque->get_id();
+
+            //função emcapetada kkkkkkkkk
+            Jogador* j_atacante = this->get_jogador(t_ataque->get_player());
+
+            // 1️⃣ Descobre o defensor ANTES de alterar qualquer coisa
+            Jogador* j_defesa = this->get_jogador(t_defesa->get_player());
+
+            if (!j_defesa) {
+                throw std::runtime_error("War::recebe_territorio: Jogador defensor nao encontrado");
+            }
+
+            // 2️⃣ Remove o território do defensor
+            Territorio t = j_defesa->remover_territorio(t_defesa->get_id());
+
+            //Setta as tropas para 1
+            t.set_tropas(1);
+
+            // 3️⃣ Atualiza o dono do território
+            t.set_player(j_atacante->get_nome());
+
+            // 4️⃣ Adiciona ao atacante
+            j_atacante->adicionar_territorio(t);
+
+            //Comportamento estranho... esse t_defesa fica apontando para o lugar "errado"
+            t_defesa = this->get_territorio(id_defesa);
+            t_ataque = this->get_territorio(id_ataque);
+            
+            if(t_ataque->get_num_tropas() <= 3){
+                *t_defesa += t_ataque->get_num_tropas()-2;
+                *t_ataque -= t_ataque->get_num_tropas()-1;
+            } else {
+                *t_defesa += 2;
+                *t_ataque -= 3;
+            }
+        }
     }
 
     void War::simular_multi_ataques(char player){

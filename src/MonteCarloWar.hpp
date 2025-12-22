@@ -37,16 +37,19 @@ class MonteCarloWar{
        void simula_rodadas();
 
         /**
-        * @brief 
+        * @brief encontra o melhor posicionamento para war
         * @param player 
         */
-       void encontrar_posicionamento(char player, unsigned int profundiadade, unsigned int tamanho_threads);
+       War encontrar_posicionamento(char player, unsigned int profundiadade, unsigned int tamanho_threads);
 
         /**
         * @brief 
         * @param player 
         */
        void encontrar_ataque(char player, unsigned int profundiadade, unsigned int tamanho_threads);
+
+
+       War encontrar_reposicionamento(char player, unsigned int profundiadade, unsigned int tamanho_threads);
 
         /**
         * @brief retorna o War de MCWar

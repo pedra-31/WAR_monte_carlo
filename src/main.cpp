@@ -27,13 +27,16 @@ int main() {
         if(comando == "ajuda" || comando == "help"){
             std::cout << "\najuda/help - Mostra todos os comandos disponiveis\n\n" 
                 << "clear/cls/limpar - Limpa a tela do console\n\n"
-                << "info - Mostra informações do jogo\n\n"
-                << "info_territorios - Mostra informações dos territorios\n\n"
-                << "territorio [territorio] - Mostra informação sobre um territorio especifico\n\n" 
+                << "info - Mostra informacoes do jogo\n\n"
+                << "info_territorios - Mostra informacoes dos territorios\n\n"
+                << "territorio [territorio] - Mostra informacao sobre um territorio especifico\n\n" 
                 << "set_tropas [territorio] [tropas] - \nMuda a quantidade de tropas em um certo territorio de nome [territorio] para [tropas]\n\n"
                 << "adicionar_tropas [territorio] [tropas] - \nAdiciona tropas em um certo territorio de nome [territorio] com [tropas] como quantidade de tropas\n\n"
                 << "trocar_territorio [player] [territorio] - \nEntrega um territorio de nome [territorio] para o player de nome [player]\n\n"
-                << "remove_cartas [player] [cartas] - \nRetira a quantidade [cartas] de cartas para o player de nome [player]\n\n";
+                << "remove_cartas [player] [cartas] - \nRetira a quantidade [cartas] de cartas para o player de nome [player]\n\n"
+                << "encontrar_pos [player] - \nEncontra o melhor posicionamento para a jogada atual de [player]\n\n"
+                << "encontrar_ataque [player] - \nEncontra o melhor ataque para a jogada atual de [player]\n\n"
+                << "encontrar_repos [player] - \nEncontra o melhor reposicionamento para a jogada atual de [player]\n\n";
 
         } else if(comando == "clear" || comando == "cls" || comando == "limpar"){
             for(int i = 0; i < 50; i++){
@@ -126,32 +129,50 @@ int main() {
             if (!(iss >> nome_player)) {
                 std::cout << "Input inválido\n";
             }
-
-            MonteCarloWar mc_war(main_war);
-            mc_war.encontrar_posicionamento(nome_player, 50, 1000);
-        
+            try{
+                main_war.get_jogador(nome_player);
+                MonteCarloWar mc_war(main_war);
+                War war_temp = mc_war.encontrar_posicionamento(nome_player, 50, 1000);
+                std::cout << "Aceita posicionamento? (S/N) ";
+                std::string reposta; std::cin >> reposta;
+                if(reposta == "S" || reposta == "s"){
+                    main_war = war_temp;
+                }
+            } catch(std::runtime_error& e){
+                std::cout << "Player invalido\n";
+            }
         } else if(comando == "encontrar_ataque"){
             char nome_player;
             if (!(iss >> nome_player)) {
                 std::cout << "Input inválido\n";
             }
-            
-            MonteCarloWar mc_war(main_war);
-            mc_war.encontrar_ataque(nome_player, 30, 700);
+            try{
+                main_war.get_jogador(nome_player);
+                MonteCarloWar mc_war(main_war);
+                mc_war.encontrar_ataque(nome_player, 30, 700);
+            } catch(std::runtime_error& e){
+                std::cout << "Player invalido\n";
+            }
         
         } else if(comando == "encontrar_repos"){
             char nome_player;
             if (!(iss >> nome_player)) {
                 std::cout << "Input inválido\n";
             }
-            
-            MonteCarloWar mc_war(main_war);
-            mc_war.encontrar_ataque(nome_player, 30, 700);
-        
+            try{
+                main_war.get_jogador(nome_player);
+                MonteCarloWar mc_war(main_war);
+                War war_temp = mc_war.encontrar_reposicionamento(nome_player, 30, 300);
+                std::cout << "Aceita posicionamento? (S/N) ";
+                std::string reposta; std::cin >> reposta;
+                if(reposta == "S" || reposta == "s"){
+                    main_war = war_temp;
+                }
+            } catch(std::runtime_error& e){
+                std::cout << "Player invalido\n";
+            }
         } else if(comando == "TESTE"){
-            MonteCarloWar mc_war(main_war);
-            mc_war.encontrar_posicionamento('b', 50, 1000);
-            
+
         } else {
             std::cout << "comando invalido" << std::endl;
         }

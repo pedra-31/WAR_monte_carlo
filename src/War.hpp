@@ -57,7 +57,6 @@ class War {
         Jogador* get_jogador(char nome);
         unsigned int get_num_jogadores();
         std::vector<char> get_ordem_jogadores() const;
-        const std::vector<uint16_t>& get_divisas() const;
 
 
         Territorio* get_territorio(const std::string& nome);
@@ -126,7 +125,9 @@ class War {
         /**
         * @brief Escolhe um ataque 
         */
-        Divisa simular_atacar(char player);
+        Divisa simular_atacar_divisa(char player);
+
+        void simular_atacar(char player);
 
         /**
         * @brief Escolhe um ataque 
