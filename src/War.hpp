@@ -126,7 +126,7 @@ class War {
         /**
         * @brief Escolhe um ataque 
         */
-        void simular_atacar(char player);
+        Divisa simular_atacar(char player);
 
         /**
         * @brief Escolhe um ataque 

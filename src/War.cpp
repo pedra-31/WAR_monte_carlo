@@ -6,6 +6,7 @@
 
         War::War(int num_jogadores) :
         _gen(std::random_device{}()){
+            if(num_jogadores == 0){ return; }
             ler_territorios("../data/territorios.txt", num_jogadores);
             ler_divisas("../data/divisas.txt");
             ler_continentes("../data/continentes.txt");   
@@ -93,7 +94,7 @@
                     std::cout << "Erro inesperado em War::get_territorio(uint16_t id_territorio)\n";
                 }
             }
-            return nullptr;
+            throw std::runtime_error("War::get_territorio: Não foi encontrado esse território em jogador " + id_territorio);
         }
 
         std::vector<char> War::get_ordem_jogadores() const{
@@ -111,12 +112,12 @@
                 try{
                     return j.get_territorio(nome);
                 } catch(const std::runtime_error& e){
-
+        
                 }  catch(...){
                     std::cout << "Erro inesperado em War::get_territorio(const std::string& nome)\n";
                 }
             }
-            return nullptr;
+            throw std::runtime_error("War::get_territorio: Não foi encontrado esse território em jogador " + nome);
         }
 
         Jogador* War::get_jogador(char jogador){ 
@@ -126,7 +127,7 @@
                 }
             }
             throw std::runtime_error("War::get_jogador(char jogador): Não existe jogador com esse nome: " + jogador);
-        }
+        }        
 
         std::vector<uint16_t> War::get_id_territorios_adjacentes(uint16_t id_territorio){
             std::vector<uint16_t> lista;
@@ -289,15 +290,22 @@
     }
 
     void War::simular_posicionar_tropas(char player){
-        uint16_t num_tropas = this->get_jogador(player)->get_tropas();
+        if(get_num_jogadores() == 1){
+            return;
+        }
+
+        Jogador* j = this->get_jogador(player);
+
+        uint16_t num_tropas = j->get_tropas();
         //somando quantidade de tropas providas pelos continentes
         for(auto& c : _continentes){
             //AHHHHHHHHHHHHHHHHHHH essa função deveria ser para jogador e não contrário, mas WHAREVER, vai ficar assim
-            if(c.possui_continente(this->get_jogador(player))){
+            if(c.possui_continente(j)){
                 num_tropas += c.get_pontos_conquista();
             }
         }
-        
+
+        j->sorteia_carta();
         auto v_adj = this->get_id_territorios_adjacentes_com_inimigos(player);
 
         if(v_adj.empty()){
@@ -311,17 +319,17 @@
         }
     }
 
-    void War::simular_atacar(char player){
+    Divisa War::simular_atacar(char player){
         //se só existe 1 player para a operação
         if(get_num_jogadores() == 1){
-            return;
+            return Divisa(0, 0);
         }
 
         //acho divisas_interessantes
         auto divisas_interessantes = this->get_divisas_intessantes(player);
         
         if(divisas_interessantes.empty()){
-            return;
+            return Divisa(0, 0);
         }
 
         //Sorteio uma divisa qualquer
@@ -343,7 +351,7 @@
 
         //Se existe desvantagem forte recua o ataque
         if(t_ataque->get_num_tropas() + 3 < t_defesa->get_num_tropas()){
-            return;
+            return Divisa(0, 0);
         }
         
         std::uniform_real_distribution<double> uniform{0.0, 1.0};
@@ -490,68 +498,68 @@
                 *t_ataque -= 3;
             }
         }
+        return d_ataque;
     }
 
     void War::simular_multi_ataques(char player){
         //gera uma quantidade aleatoria de ataques para fazer
         std::uniform_int_distribution<uint16_t> dist5(0, ((uint16_t)this->get_jogador(player)->num_get_tropas()/2) - 1);
         for(int i = 0; i < dist5(_gen); i++){
-            if(this->get_num_jogadores() == 1){
-                return;
-            }
             this->checa_jogadores();
-            if(this->get_num_jogadores() == 1){
-                return;
-            } 
             this->simular_atacar(player);
         }
     }
 
-    void War::simular_reposicionar(char player){
-        Jogador * j = this->get_jogador(player);
-        auto territorios_jogador = j->get_id_territorios();
-
-        if (territorios_jogador.empty()){
+    void War::simular_reposicionar(char player) {
+        if(this->get_num_jogadores() == 1){
             return;
-        }
+        } 
         
-        std::vector<Territorio*> territorios_interessantes;
-        for(auto& id_t : territorios_jogador){
-            if(j->get_territorio(id_t)->get_num_tropas() > 1){
-                territorios_interessantes.push_back(j->get_territorio(id_t));
+        Jogador* j = get_jogador(player);
+        if (!j) return;
+
+        const auto& ids = j->get_id_territorios();
+        if (ids.empty()) return;
+
+        // Coleta territórios válidos (mais de 1 tropa)
+        std::vector<Territorio*> candidatos;
+        candidatos.reserve(ids.size());
+
+        for (uint16_t id : ids) {
+            Territorio* t = j->get_territorio(id);
+            if (t && t->get_num_tropas() > 1) {
+                candidatos.push_back(t);
             }
         }
-        
-        if (territorios_interessantes.empty()){
-            return;
-        }
 
-        std::uniform_int_distribution<uint16_t> dist3(0, territorios_interessantes.size() - 1);
+        if (candidatos.empty()) return;
 
+        // Sorteia território de origem
+        std::uniform_int_distribution<size_t> dist_origem(0, candidatos.size() - 1);
+        Territorio* origem = candidatos[dist_origem(_gen)];
 
-        Territorio* t = territorios_interessantes[dist3(_gen)];
-        uint16_t t_id = t->get_id();
-        
-        //escolhe um numero aleatorio de vezes para fazer reposicionamentos
-        int max_movimentos = t->get_num_tropas() - 1;
-        std::uniform_int_distribution<int> dist_mov(1, max_movimentos);
-        int n = dist_mov(_gen);
-        
-        for(int i = 0; i < n && t->get_num_tropas() > 1; i++){
-            auto t_adjacentes = this->get_id_territorios_adjacentes(t_id);
-            if (t_adjacentes.empty()) break;
+        int tropas_disponiveis = origem->get_num_tropas() - 1;
+        if (tropas_disponiveis <= 0) return;
 
-            std::uniform_int_distribution<uint16_t> dist4(0, t_adjacentes.size() - 1);
-            Territorio* t_adj = this->get_territorio(t_adjacentes[dist4(_gen)]);
+        std::uniform_int_distribution<int> dist_mov(1, tropas_disponiveis);
+        int movimentos = dist_mov(_gen);
 
-            if(t_adj->get_player() != player){
-                continue; // melhor que break
+        const uint16_t origem_id = origem->get_id();
+
+        for (int i = 0; i < movimentos && origem->get_num_tropas() > 1; ++i) {
+            auto adj_ids = get_id_territorios_adjacentes(origem_id);
+            if (adj_ids.empty()) break;
+
+            std::uniform_int_distribution<size_t> dist_adj(0, adj_ids.size() - 1);
+            Territorio* destino = get_territorio(adj_ids[dist_adj(_gen)]);
+
+            if (!destino || destino->get_player() != player) {
+                continue;
             }
 
-            *t_adj += 1;
-            *t -= 1;
+            *destino += 1;
+            *origem -= 1;
         }
-
     }
 
 

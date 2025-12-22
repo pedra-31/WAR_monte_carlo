@@ -46,7 +46,7 @@ class MonteCarloWar{
         * @brief 
         * @param player 
         */
-       void encontrar_ataque(char player);
+       void encontrar_ataque(char player, unsigned int profundiadade, unsigned int tamanho_threads);
 
         /**
         * @brief retorna o War de MCWar

@@ -30,6 +30,7 @@ int main() {
                 << "info - Mostra informações do jogo\n\n"
                 << "info_territorios - Mostra informações dos territorios\n\n"
                 << "territorio [territorio] - Mostra informação sobre um territorio especifico\n\n" 
+                << "set_tropas [territorio] [tropas] - \nMuda a quantidade de tropas em um certo territorio de nome [territorio] para [tropas]\n\n"
                 << "adicionar_tropas [territorio] [tropas] - \nAdiciona tropas em um certo territorio de nome [territorio] com [tropas] como quantidade de tropas\n\n"
                 << "trocar_territorio [player] [territorio] - \nEntrega um territorio de nome [territorio] para o player de nome [player]\n\n"
                 << "remove_cartas [player] [cartas] - \nRetira a quantidade [cartas] de cartas para o player de nome [player]\n\n";
@@ -45,22 +46,34 @@ int main() {
         } else if(comando == "info_territorios" || comando == "info_territórios"){
             main_war.info_territorios();
 
-        } else if(comando == "territorio" || comando == "território"){
+        } else if(comando == "territorio"){
             std::string nome_territorio; iss >> nome_territorio;
-            Territorio* t = main_war.get_territorio(nome_territorio);
-
-            if(t != nullptr){
+            try{
                 main_war.get_territorio(nome_territorio)->info();
-            } else {
+            } catch (std::runtime_error& e){
                 std::cout << "Territorio nao encontrado\n";
             }
 
         } else if(comando == "adicionar_tropas"){
             std::string nome_territorio; unsigned int quant_tropas;
             iss >> nome_territorio; iss >> quant_tropas;
-            *main_war.get_territorio(nome_territorio) += quant_tropas;
+            try{
+                (*main_war.get_territorio(nome_territorio)) += quant_tropas;
+                std::cout << "Tropas adicionadas\n";
+            } catch(std::runtime_error& e) {
+                std::cerr << e.what() << std::endl;
+            }
 
-            std::cout << "Tropas adicionadas\n";
+        } else if(comando == "set_tropas"){
+            std::string nome_territorio; unsigned int quant_tropas;
+            iss >> nome_territorio; iss >> quant_tropas;
+            try{
+                main_war.get_territorio(nome_territorio)->set_tropas(quant_tropas);
+                std::cout << "Tropas settadas para: " <<  main_war.get_territorio(nome_territorio)->get_num_tropas() << "\n";
+            
+            } catch(std::runtime_error& e){
+                std::cout << std::endl << e.what() << std::endl;
+            }
 
         } else if(comando == "trocar_territorio"){
             char nome_player; std::string nome_territorio;
@@ -108,9 +121,36 @@ int main() {
                 }
             }
         
+        } else if(comando == "encontrar_pos"){
+            char nome_player;
+            if (!(iss >> nome_player)) {
+                std::cout << "Input inválido\n";
+            }
+
+            MonteCarloWar mc_war(main_war);
+            mc_war.encontrar_posicionamento(nome_player, 50, 1000);
+        
+        } else if(comando == "encontrar_ataque"){
+            char nome_player;
+            if (!(iss >> nome_player)) {
+                std::cout << "Input inválido\n";
+            }
+            
+            MonteCarloWar mc_war(main_war);
+            mc_war.encontrar_ataque(nome_player, 30, 700);
+        
+        } else if(comando == "encontrar_repos"){
+            char nome_player;
+            if (!(iss >> nome_player)) {
+                std::cout << "Input inválido\n";
+            }
+            
+            MonteCarloWar mc_war(main_war);
+            mc_war.encontrar_ataque(nome_player, 30, 700);
+        
         } else if(comando == "TESTE"){
             MonteCarloWar mc_war(main_war);
-            mc_war.encontrar_posicionamento('b', 100, 100);
+            mc_war.encontrar_posicionamento('b', 50, 1000);
             
         } else {
             std::cout << "comando invalido" << std::endl;
