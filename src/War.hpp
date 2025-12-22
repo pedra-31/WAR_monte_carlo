@@ -90,7 +90,7 @@ class War {
          * @param nome_atacante nome do jogador atacando o territorio
          * @param nome_territorio_atacado nome do território onde ocorreu a batalha
          */
-        void recebe_territorio(char nome_atacante, const std::string& nome_territorio_atacado);
+        void recebe_territorio(Jogador* j_atacante, Territorio* t_defesa);
 
         /**
          * @brief info do jogo no cout, chama todos os infos de classes componentes

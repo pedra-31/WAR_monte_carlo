@@ -46,6 +46,8 @@ class Jogador {
 
         //getters
         char get_nome() const;
+        
+        unsigned int get_num_cartas() const;
     
         /**
          * @brief devolva a lista de id_territorios que o jogador possui
@@ -87,6 +89,26 @@ class Jogador {
          */
         Territorio remover_territorio(uint16_t id_territorio);
 
+        
+        /**
+         * @brief Setta o número de cartas ao parâmetro
+         * @param num_cartas número de cartas a ser settado
+         */
+        void set_cartas(unsigned int num_cartas);
+
+        /**
+         * @brief Função para remover as cartas de acordo com uma quantidade
+         * @param n quantidade de cartas para ser retirada
+         */
+        void remove_cartas(unsigned int n);
+
+        /**
+         * @brief Função auxiliar para remover as cartas 
+         * @param tipo qual o tipo da carta a ser retirado
+         * @param qtd quantidade de cartas desse tipo para ser retirada
+         */
+        void remove_cartas(char tipo, int qtd);
+
         /**
          * @brief Sorteia uma carta ao jogador e coloca no vector de cartas 
          */
@@ -112,7 +134,7 @@ class Jogador {
          * @brief acha a quantidade de tropas que um jogador tem na rodada / troca as cartes de um certo jogador
          * @return quantidade de tropas
          */
-        uint16_t get_tropas();
+        unsigned int get_tropas();
 
         /**
          * @brief acha a quantidade de tropas estacionadas que um jogador tem em todos seus territorios

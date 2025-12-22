@@ -218,34 +218,35 @@
         }
 
 
-        void War::recebe_territorio(char nome_atacante, const std::string& nome_territorio_defensor){
-            Jogador* j_defensor = this->get_jogador(nome_atacante);
-            Jogador* j_atacante = nullptr;
-
-            for (auto& j : _jogadores){
-                for(auto& t : j.get_nome_territorios()){
-                    if(t == nome_territorio_defensor){
-                        j_defensor = &j;
-                        if(j.get_nome() == j_atacante->get_nome()){
-                            throw std::runtime_error("void War::recebe_territorio(): nome_defensor == nome_atacante");
-                        }
-                        //para não ficar fazendo umas 30 funções auxiliares eu fiz essa maravilha de código, entenda se quiser...
-                        Territorio territorio = j.remover_territorio(j_defensor->get_territorio(nome_territorio_defensor)->get_id());
-                        //seta as tropas para 1
-                        territorio.set_tropas(1);
-                        territorio.set_player(j_atacante->get_nome());
-                        //adiciona o territorio em j_atacante
-                        j_atacante->adicionar_territorio(territorio);
-                        return; 
-                    }
+        void War::recebe_territorio(Jogador* j_atacante, Territorio* t_defesa) {
+            //Testa se j_atacante já possui t_defesa
+            for (auto& t_id : j_atacante->get_id_territorios()){
+                if(t_id == t_defesa->get_id()){
+                    throw std::runtime_error(
+                        std::string("War::recebe_territorio: Jogador atacante já possui o territorio ")
+                        + std::to_string(t_id)
+                    );
                 }
             }
 
-            if(j_defensor == nullptr){
-                throw std::runtime_error("void War::recebe_territorio(...): Não existe território com o nome: " + nome_territorio_defensor);
+            // 1️⃣ Descobre o defensor ANTES de alterar qualquer coisa
+            Jogador* j_defesa = this->get_jogador(t_defesa->get_player());
+
+            if (!j_defesa) {
+                throw std::runtime_error("War::recebe_territorio: Jogador defensor nao encontrado");
             }
 
-            
+            // 2️⃣ Remove o território do defensor
+            Territorio t = j_defesa->remover_territorio(t_defesa->get_id());
+
+            //Setta as tropas para 1
+            t.set_tropas(1);
+
+            // 3️⃣ Atualiza o dono do território
+            t.set_player(j_atacante->get_nome());
+
+            // 4️⃣ Adiciona ao atacante
+            j_atacante->adicionar_territorio(t);
         }
 
 
@@ -455,8 +456,27 @@
             uint16_t id_defesa = t_defesa->get_id();
             uint16_t id_ataque = t_ataque->get_id();
 
-            //Função emcapetada consertar depois
-            this->recebe_territorio(player, t_defesa->get_nome());
+            //função emcapetada kkkkkkkkk
+            Jogador* j_atacante = this->get_jogador(t_ataque->get_player());
+
+            // 1️⃣ Descobre o defensor ANTES de alterar qualquer coisa
+            Jogador* j_defesa = this->get_jogador(t_defesa->get_player());
+
+            if (!j_defesa) {
+                throw std::runtime_error("War::recebe_territorio: Jogador defensor nao encontrado");
+            }
+
+            // 2️⃣ Remove o território do defensor
+            Territorio t = j_defesa->remover_territorio(t_defesa->get_id());
+
+            //Setta as tropas para 1
+            t.set_tropas(1);
+
+            // 3️⃣ Atualiza o dono do território
+            t.set_player(j_atacante->get_nome());
+
+            // 4️⃣ Adiciona ao atacante
+            j_atacante->adicionar_territorio(t);
 
             //Comportamento estranho... esse t_defesa fica apontando para o lugar "errado"
             t_defesa = this->get_territorio(id_defesa);
@@ -476,6 +496,13 @@
         //gera uma quantidade aleatoria de ataques para fazer
         std::uniform_int_distribution<uint16_t> dist5(0, ((uint16_t)this->get_jogador(player)->num_get_tropas()/2) - 1);
         for(int i = 0; i < dist5(_gen); i++){
+            if(this->get_num_jogadores() == 1){
+                return;
+            }
+            this->checa_jogadores();
+            if(this->get_num_jogadores() == 1){
+                return;
+            } 
             this->simular_atacar(player);
         }
     }
@@ -506,22 +533,25 @@
         uint16_t t_id = t->get_id();
         
         //escolhe um numero aleatorio de vezes para fazer reposicionamentos
-        int n = dist3(_gen);
-        for(int i = 0; i < n; i++){
+        int max_movimentos = t->get_num_tropas() - 1;
+        std::uniform_int_distribution<int> dist_mov(1, max_movimentos);
+        int n = dist_mov(_gen);
+        
+        for(int i = 0; i < n && t->get_num_tropas() > 1; i++){
             auto t_adjacentes = this->get_id_territorios_adjacentes(t_id);
-            std::uniform_int_distribution<uint16_t> dist4(0, (uint16_t)t_adjacentes.size() - 1);
-            
-            //escolhe um territorio adj para reposicionar
+            if (t_adjacentes.empty()) break;
+
+            std::uniform_int_distribution<uint16_t> dist4(0, t_adjacentes.size() - 1);
             Territorio* t_adj = this->get_territorio(t_adjacentes[dist4(_gen)]);
 
-            //Se não for de player, que pena
             if(t_adj->get_player() != player){
-                break;
+                continue; // melhor que break
             }
 
             *t_adj += 1;
             *t -= 1;
         }
+
     }
 
 

@@ -2,7 +2,7 @@
 
 
 
-        Territorio::Territorio(uint16_t id_Territorio, std::string nome, char player, uint16_t num_tropas) 
+        Territorio::Territorio(uint16_t id_Territorio, std::string nome, char player, unsigned int num_tropas) 
             : _id_Territorio(id_Territorio),
             _nome(nome),
             _player(player),
@@ -18,14 +18,14 @@
         char Territorio::get_player() const{
             return _player;
         }
-        uint16_t Territorio::get_num_tropas() const{
+        unsigned int Territorio::get_num_tropas() const{
             return _num_tropas;
         }
 
         void Territorio::set_player(char novo_player){
             _player = novo_player;
         }
-        void Territorio::set_tropas(uint16_t numero){
+        void Territorio::set_tropas(unsigned int numero){
             if(numero < 1){
                 throw std::runtime_error("Territorio::set_tropas(uint16_t numero): numero (parametro) deve ser MAIOR que 1");
             }
@@ -40,12 +40,12 @@
 
         }
 
-        Territorio& Territorio::operator+=(uint16_t x) {
+        Territorio& Territorio::operator+=(unsigned int x) {
             _num_tropas += x;
             return *this;
         }
 
-        Territorio& Territorio::operator-=(uint16_t x) {
+        Territorio& Territorio::operator-=(unsigned int x) {
             _num_tropas -= x;
             return *this;
         }

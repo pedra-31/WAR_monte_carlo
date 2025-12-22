@@ -40,7 +40,7 @@ class MonteCarloWar{
         * @brief 
         * @param player 
         */
-       void encontrar_posicionamento(char player);
+       void encontrar_posicionamento(char player, unsigned int profundiadade, unsigned int tamanho_threads);
 
         /**
         * @brief 

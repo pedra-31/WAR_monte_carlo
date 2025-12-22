@@ -15,25 +15,25 @@ class Territorio {
         uint16_t _id_Territorio;
         std::string _nome;
         char _player;
-        uint16_t _num_tropas;
+        unsigned int _num_tropas;
 
     public:
 
         /**
          * @brief Construtor de Territorio
          */
-        Territorio(uint16_t id_Territorio, std::string nome, char player, uint16_t tropas);
+        Territorio(uint16_t id_Territorio, std::string nome, char player, unsigned int tropas);
 
 
         //getters:
         uint16_t get_id() const;
         std::string get_nome() const;
         char get_player() const;
-        uint16_t get_num_tropas() const;
+        unsigned int get_num_tropas() const;
 
         //setters
         void set_player(char novo_player);
-        void set_tropas(uint16_t numero);
+        void set_tropas(unsigned int numero);
 
         /**
          * @brief Mostra no cout a situação do vértice
@@ -43,13 +43,13 @@ class Territorio {
         /**
          * @brief += Sobrecarregado. Soma ao num de tropas que está posicionada no vértice
          */
-        Territorio& operator+=(uint16_t x);
+        Territorio& operator+=(unsigned int x);
 
         /**
          * @brief -= Sobrecarregado. Subtrai ao num de tropas que está posicionada no vértice
          * Joga uma exceção
          */
-        Territorio& operator-=(uint16_t x);
+        Territorio& operator-=(unsigned int x);
 
 };
 
