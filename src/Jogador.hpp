@@ -45,9 +45,24 @@ class Jogador {
         Jogador(char nome);
 
         //getters
+        /**
+         * @brief retorna o nome de jogador (this)
+         * @return nome do jogador
+         */
         char get_nome() const;
-        
+
+        /**
+         * @brief Retorna a quantidade de cartas que o jogador (this) possui atualmente
+         * @return quantidade de cartas 
+         */
         unsigned int get_num_cartas() const;
+        
+        /**
+         * @brief Acha a quantidade de tropas estacionadas que um jogador tem em todos seus territorios
+         * @return quantidade de tropas estacionadas
+         */
+        unsigned int get_num_tropas() const;
+
     
         /**
          * @brief devolva a lista de id_territorios que o jogador possui
@@ -137,12 +152,6 @@ class Jogador {
         unsigned int get_tropas();
 
         /**
-         * @brief acha a quantidade de tropas estacionadas que um jogador tem em todos seus territorios
-         * @return quantidade de tropas estacionadas
-         */
-        unsigned int num_get_tropas();
-
-        /**
          * @brief posiciona tropas do jogador no território 
          * @param id_territorio id do território para posicionar tropas
          * @param quantidade quantidade de tropas para ser posicionada
@@ -155,23 +164,7 @@ class Jogador {
          * @param quantidade quantidade de tropas para ser posicionada
          */
         void posicionar_tropa(const std::string& nome_territorio, unsigned int quantidade);
-
-        /**
-         * @brief Ao final de uma rodada de um jogador faz o reposicionamento de tropas 
-         * @param origem_territorio nome do território de origem 
-         * @param destino_territorio nome do território de destino das tropas 
-         * @param quantidade quantidade de tropas para ser reposicionada
-         * @param divisas lista das divisas existentes em War
-         */
-        void reposicionar_tropa(const std::string& origem_territorio, const std::string& destino_territorio, unsigned int quantidade, const std::vector<Divisa>& divisas);
-        /**
-         * @brief Ao final de uma rodada de um jogador faz o reposicionamento de tropas 
-         * @param id_origem_territorio id do território de origem 
-         * @param id_destino_territorio id do território de destino das tropas 
-         * @param quantidade quantidade de tropas para ser posicionada
-         * @param divisas lista das divisas existentes em War
-         */
-        void reposicionar_tropa(uint16_t id_origem_territorio, uint16_t id_destino_territorio, unsigned int quantidade, const std::vector<Divisa>& divisas);
+        
 };
 
 

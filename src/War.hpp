@@ -48,9 +48,11 @@ class War {
          */
         War(int num_jogadores);
 
-        //helpers de contrutor. Leêm informações do arquivo caminho
+        //helper de contrutor. Lê informações do arquivo caminho
         void ler_territorios(const std::string& caminho, unsigned int num_jogadores);
+        //helper de contrutor. Lê informações do arquivo caminho
         void ler_divisas(const std::string& caminho);
+        //helper de contrutor. Lê informações do arquivo caminho
         void ler_continentes(const std::string& caminho);
 
         //getters
@@ -109,37 +111,76 @@ class War {
         /**
         * @brief Reseta o gerador de numeros aleatorios
         */
-
         void restart_gen();
 
+       /**
+         * @brief Calcula a quantidade de pontos de vitória de um jogador.
+         *
+         * @param player Identificador do jogador.
+         * @return Quantidade de pontos de vitória calculada.
+         */
+        unsigned int calcular_pontos_vitoria(char player);
+
         /**
-        * @brief calcula a quantidade de pontos vitoria
-        */
-        unsigned int calcular_pontos_vitoria(char nome);
-        
-        /**
-        * @brief Escolhe aleatoriamente as posições para posicionar tropas 
-        */
+         * @brief Escolhe aleatoriamente as posições para posicionar tropas.
+         *
+         * Simula a fase de posicionamento de tropas de um jogador,
+         * realizando escolhas aleatórias válidas de acordo com o estado do jogo.
+         *
+         * @param player Identificador do jogador.
+         */
         void simular_posicionar_tropas(char player);
 
         /**
-        * @brief Escolhe um ataque 
-        */
+         * @brief Escolhe aleatoriamente uma divisa para ataque.
+         *
+         * Seleciona e avalia um possível ataque do jogador, retornando
+         * a divisa escolhida caso o ataque seja realizado. Caso nenhum
+         * ataque seja efetuado, retorna uma divisa inválida.
+         *
+         * @param player Identificador do jogador.
+         * @return Divisa escolhida para o ataque, ou uma divisa inválida se não houver ataque.
+         */
         Divisa simular_atacar_divisa(char player);
 
+        /**
+         * @brief Simula um ataque de um jogador.
+         *
+         * Executa a lógica completa de ataque do jogador, incluindo
+         * a escolha da divisa e a resolução do combate.
+         *
+         * @param player Identificador do jogador.
+         */
         void simular_atacar(char player);
 
         /**
-        * @brief Escolhe um ataque 
-        */
+         * @brief Simula múltiplos ataques consecutivos de um jogador.
+         *
+         * Realiza uma sequência de ataques enquanto as condições
+         * para ataque forem satisfeitas.
+         *
+         * @param player Identificador do jogador.
+         */
         void simular_multi_ataques(char player);
 
         /**
-        * @brief Faz reposicionamentos
-        */
+         * @brief Simula o reposicionamento de tropas de um jogador.
+         *
+         * Realiza movimentações de tropas entre territórios do jogador
+         * após a fase de ataque.
+         *
+         * @param player Identificador do jogador.
+         */
         void simular_reposicionar(char player);
 
+        /**
+         * @brief Remove jogadores que não possuem mais territórios.
+         *
+         * Verifica o estado atual dos jogadores e elimina aqueles
+         * que não controlam nenhum território.
+         */
         void checa_jogadores();
+
 
         ~War();   
 

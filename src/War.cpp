@@ -286,7 +286,19 @@
         }
 
     unsigned int War::calcular_pontos_vitoria(char nome){
-        return this->get_jogador(nome)->get_nome_territorios().size()*2 + this->get_jogador(nome)->num_get_tropas();
+        Jogador* j = this->get_jogador(nome);
+
+        unsigned int num_tropas = j->get_nome_territorios().size()*2 + j->get_num_tropas();
+
+        //somando quantidade de tropas providas pelos continentes
+        for(auto& c : _continentes){
+            //AHHHHHHHHHHHHHHHHHHH essa função deveria ser para jogador e não contrário, mas WHAREVER, vai ficar assim
+            if(c.possui_continente(j)){
+                num_tropas += c.get_pontos_conquista();
+            }
+        }
+
+        return num_tropas;
     }
 
     void War::simular_posicionar_tropas(char player){
@@ -327,10 +339,7 @@
 
         //acho divisas_interessantes
         auto divisas_interessantes = this->get_divisas_intessantes(player);
-        
-        if(divisas_interessantes.empty()){
-            return Divisa(0, 0);
-        }
+
 
         //Sorteio uma divisa qualquer
         std::uniform_int_distribution<uint16_t> dist2(0, (uint16_t)divisas_interessantes.size() - 1);
@@ -349,8 +358,18 @@
             t_ataque = this->get_territorio(d_ataque.get_v2());
         }
 
-        //Se existe desvantagem forte recua o ataque
-        if(t_ataque->get_num_tropas() + 3 < t_defesa->get_num_tropas()){
+                if(divisas_interessantes.empty()){
+            return Divisa(0, 0);
+        }
+
+        //Decide se vai atacar
+        std::uniform_real_distribution<double> u(0.0, 1.0);
+        int vantagem = t_ataque->get_num_tropas() - t_defesa->get_num_tropas();
+
+        double prob = 0.4 + 0.1 * vantagem;
+        prob = std::clamp(prob, 0.1, 0.95);
+
+        if (u(_gen) > prob) {
             return Divisa(0, 0);
         }
         
@@ -467,24 +486,7 @@
             //função emcapetada kkkkkkkkk
             Jogador* j_atacante = this->get_jogador(t_ataque->get_player());
 
-            // 1️⃣ Descobre o defensor ANTES de alterar qualquer coisa
-            Jogador* j_defesa = this->get_jogador(t_defesa->get_player());
-
-            if (!j_defesa) {
-                throw std::runtime_error("War::recebe_territorio: Jogador defensor nao encontrado");
-            }
-
-            // 2️⃣ Remove o território do defensor
-            Territorio t = j_defesa->remover_territorio(t_defesa->get_id());
-
-            //Setta as tropas para 1
-            t.set_tropas(1);
-
-            // 3️⃣ Atualiza o dono do território
-            t.set_player(j_atacante->get_nome());
-
-            // 4️⃣ Adiciona ao atacante
-            j_atacante->adicionar_territorio(t);
+            this->recebe_territorio(j_atacante, t_defesa);
 
             //Comportamento estranho... esse t_defesa fica apontando para o lugar "errado"
             t_defesa = this->get_territorio(id_defesa);
@@ -531,8 +533,14 @@
             t_ataque = this->get_territorio(d_ataque.get_v2());
         }
 
-        //Se existe desvantagem forte recua o ataque
-        if(t_ataque->get_num_tropas() + 3 < t_defesa->get_num_tropas()){
+        //Decide se vai atacar
+        std::uniform_real_distribution<double> u(0.0, 1.0);
+        int vantagem = t_ataque->get_num_tropas() - t_defesa->get_num_tropas();
+
+        double prob = 0.4 + 0.1 * vantagem;
+        prob = std::clamp(prob, 0.1, 0.95);
+
+        if (u(_gen) > prob) {
             return;
         }
         
@@ -649,24 +657,7 @@
             //função emcapetada kkkkkkkkk
             Jogador* j_atacante = this->get_jogador(t_ataque->get_player());
 
-            // 1️⃣ Descobre o defensor ANTES de alterar qualquer coisa
-            Jogador* j_defesa = this->get_jogador(t_defesa->get_player());
-
-            if (!j_defesa) {
-                throw std::runtime_error("War::recebe_territorio: Jogador defensor nao encontrado");
-            }
-
-            // 2️⃣ Remove o território do defensor
-            Territorio t = j_defesa->remover_territorio(t_defesa->get_id());
-
-            //Setta as tropas para 1
-            t.set_tropas(1);
-
-            // 3️⃣ Atualiza o dono do território
-            t.set_player(j_atacante->get_nome());
-
-            // 4️⃣ Adiciona ao atacante
-            j_atacante->adicionar_territorio(t);
+            this->recebe_territorio(j_atacante, t_defesa);
 
             //Comportamento estranho... esse t_defesa fica apontando para o lugar "errado"
             t_defesa = this->get_territorio(id_defesa);
@@ -684,7 +675,7 @@
 
     void War::simular_multi_ataques(char player){
         //gera uma quantidade aleatoria de ataques para fazer
-        std::uniform_int_distribution<uint16_t> dist5(0, ((uint16_t)this->get_jogador(player)->num_get_tropas()/2) - 1);
+        std::uniform_int_distribution<uint16_t> dist5(0, ((uint16_t)this->get_jogador(player)->get_num_tropas()/2) - 1);
         for(int i = 0; i < dist5(_gen); i++){
             this->checa_jogadores();
             this->simular_atacar(player);
